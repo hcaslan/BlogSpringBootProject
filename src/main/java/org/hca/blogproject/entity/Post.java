@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -22,10 +23,10 @@ public class Post {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "title")
+    @Column(name = "title",columnDefinition = "varchar(64)")
     private String title;
 
-    @Column(name = "content")
+    @Column(name = "content",columnDefinition = "varchar(2048)")
     private String content;
 
     @ManyToOne
@@ -42,7 +43,6 @@ public class Post {
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private List<Category> categories;
-
 
     @CreationTimestamp
     @Column(name = "created_at")

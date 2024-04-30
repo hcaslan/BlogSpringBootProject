@@ -2,8 +2,10 @@ package org.hca.blogproject.service;
 
 import lombok.RequiredArgsConstructor;
 import org.hca.blogproject.dto.request.UserRequestDto;
+import org.hca.blogproject.dto.response.DetailedUserResponseDto;
 import org.hca.blogproject.dto.response.UserResponseDto;
 import org.hca.blogproject.entity.User;
+import org.hca.blogproject.mapper.CustomUserMapper;
 import org.hca.blogproject.mapper.UserMapper;
 import org.hca.blogproject.repository.UserRepository;
 import org.hca.blogproject.service.rules.UserBusinessRules;
@@ -21,10 +23,11 @@ public class UserService{
     private final UserRepository userRepository;
     private final UserBusinessRules userBusinessRules;
     private final UserMapper userMapper;
+    private final CustomUserMapper customUserMapper;
 
     public UserResponseDto saveDto(UserRequestDto dto) {
         User user = UserMapper.INSTANCE.userRequestDtoToUser(dto);
-        userBusinessRules.checkIfEmailTakenBySomeoneElse(user.getEmail(),user.getId());
+        userBusinessRules.checkIfEmailTakenBySomeoneElse(user.getEmail());
         userRepository.save(user);
         return UserMapper.INSTANCE.userToUserResponseDto(user);
     }
@@ -38,11 +41,11 @@ public class UserService{
         userRepository.save(userToUpdate);
         return UserMapper.INSTANCE.userToUserResponseDto(userToUpdate);
     }
-    public UserResponseDto findDtoById(Long id){
+    public DetailedUserResponseDto findDtoById(Long id){
         userBusinessRules.checkIfUserDeleted(id);
         userBusinessRules.checkIfUserExistsById(id);
 
-        return UserMapper.INSTANCE.userToUserResponseDto(userRepository.findById(id).get());//checked at business rules
+        return customUserMapper.userToDetailedUserResponseDto(userRepository.findById(id).get());//checked at business rules
     }
     public List<UserResponseDto> findAllDto() {
         return  userRepository.findAll()

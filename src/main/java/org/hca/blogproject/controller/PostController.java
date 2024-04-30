@@ -47,8 +47,24 @@ public class PostController {
     }
 
     //delete but continue to store in database
-    @PutMapping(SET_TO_DELETED)
-    public ResponseEntity<PostResponseDto> setToDeletedDto(@PathVariable Long id){
-        return ResponseEntity.ok(postService.setToDeletedDto(id));
+//    @DeleteMapping(DELETE)
+//    public ResponseEntity<PostResponseDto> setToDeletedDto(@PathVariable Long id){
+//        return ResponseEntity.ok(postService.setToDeletedDto(id));
+//    }
+    @GetMapping(GET_POSTS_BY_USER_ID)
+    public ResponseEntity<List<PostResponseDto>> findByUserId(@PathVariable Long id){
+        return ResponseEntity.ok(postService.findByUserId(id));
+    }
+    @GetMapping(GET_POSTS_BY_CATEGORY_ID)
+    public ResponseEntity<List<PostResponseDto>> findByCategoryId(@PathVariable Long id){
+        return ResponseEntity.ok(postService.findByCategoryId(id));
+    }
+    @GetMapping(GET_POSTS_BY_CATEGORY_NAME)
+    public ResponseEntity<List<PostResponseDto>> findByCategoryName(@RequestParam String category){
+        return ResponseEntity.ok(postService.findByCategoryName(category));
+    }
+    @GetMapping(SEARCH)
+    public ResponseEntity<List<PostResponseDto>> search(@RequestParam String search){
+        return ResponseEntity.ok(postService.search(search));
     }
 }

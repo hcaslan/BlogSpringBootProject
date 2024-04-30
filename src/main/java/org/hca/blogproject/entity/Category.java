@@ -20,10 +20,10 @@ public class Category {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name",columnDefinition = "varchar(32)")
     private String name;
 
-    @Column(name = "description")
+    @Column(name = "description",columnDefinition = "varchar(128)")
     private String description;
 
     @Column(name = "is_deleted")

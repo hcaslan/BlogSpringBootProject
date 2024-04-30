@@ -14,6 +14,10 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+/**
+ * @CustomMapper
+ */
 @RequiredArgsConstructor
 @Component
 public class CustomPostMapper {
@@ -24,16 +28,26 @@ public class CustomPostMapper {
 
     public PostResponseDto postToPostResponseDto(Post post) {
         List<String> categoryNames = post.getCategories().stream()
+                .filter(category ->!category.isDeleted())
                 .map(Category::getName)
                 .collect(Collectors.toList());
-
-        return PostResponseDto.builder()
-                .id(post.getId())
-                .content(post.getContent())
-                .title(post.getTitle())
-                .categories(categoryNames)
-                .userFirstAndLastName(post.getUser().getFirstname() + " " + post.getUser().getLastname())
-                .build();
+        if(post.getUser().isDeleted()){
+            return PostResponseDto.builder()
+                    .id(post.getId())
+                    .content(post.getContent())
+                    .title(post.getTitle())
+                    .categories(categoryNames)
+                    .userFirstAndLastName("DELETED_USER")
+                    .build();
+        }else{
+            return PostResponseDto.builder()
+                    .id(post.getId())
+                    .content(post.getContent())
+                    .title(post.getTitle())
+                    .categories(categoryNames)
+                    .userFirstAndLastName(post.getUser().getFirstname() + " " + post.getUser().getLastname())
+                    .build();
+        }
     }
 
     public Post postRequestDtoToPost(PostRequestDto dto) {
@@ -56,5 +70,13 @@ public class CustomPostMapper {
                 .user(userService.findById(dto.userId()).get())//checked at business rules
                 .categories(categoryList)
                 .build();
+    }
+    public List<PostResponseDto> postListToPostResponseDtoList(List<Post> postList) {
+        List<PostResponseDto> results = new ArrayList<>();
+
+        postList.forEach(post -> {
+            results.add(postToPostResponseDto(post));
+        });
+        return results;
     }
 }

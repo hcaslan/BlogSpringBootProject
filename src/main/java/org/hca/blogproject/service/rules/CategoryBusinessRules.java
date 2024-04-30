@@ -1,6 +1,5 @@
 package org.hca.blogproject.service.rules;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.hca.blogproject.entity.Category;
 import org.hca.blogproject.exception.BusinessException;
@@ -10,6 +9,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * @BusinessRules
+ */
 @Service
 @RequiredArgsConstructor
 public class CategoryBusinessRules {
@@ -17,11 +19,18 @@ public class CategoryBusinessRules {
     public void checkIfCategoryExistsById(Long id) {
         if (!categoryRepository.existsById(id)) throw new BusinessException(ErrorType.CATEGORY_NOT_FOUND);
     }
-
     public void checkIfCategoryExistsByName(String name) {
-        if (categoryRepository.existsByName(name)) throw new BusinessException(ErrorType.CATEGORY_ALREADY_EXISTS);
+        if (!categoryRepository.existsByName(name)) throw new BusinessException(ErrorType.CATEGORY_NOT_FOUND);
     }
-
+    public boolean checkIfCategoryAlreadyExistsByName(String name) {
+        if (categoryRepository.existsByName(name)){
+           if(!categoryRepository.findByName(name).isDeleted()){
+               throw new BusinessException(ErrorType.CATEGORY_ALREADY_EXISTS);
+           }
+           return true;
+        }
+        return false;
+    }
     public boolean isCategoryExistsByName(String name) {
         return (categoryRepository.existsByName(name));
     }

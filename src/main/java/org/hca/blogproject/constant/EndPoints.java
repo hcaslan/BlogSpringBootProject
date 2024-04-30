@@ -15,13 +15,12 @@ public class EndPoints {
     public static final String USER="/users";
 
     //methods:
-    public static final String LOGIN="/login";
-    public static final String REGISTER="/register";
-    public static final String SAVE="/save";
     public static final String UPDATE="/{id}";
     public static final String DELETE="/{id}";
-    public static final String FIND_ALL="/findall";
     public static final String FIND_BY_ID="/{id}";
-    public static final String FIND_ALL_DTO="/findalldto";
     public static final String SET_TO_DELETED ="/settodeleted/{id}";
+    public static final String GET_POSTS_BY_USER_ID ="user/{id}";
+    public static final String GET_POSTS_BY_CATEGORY_ID ="/category/{id}";
+    public static final String GET_POSTS_BY_CATEGORY_NAME ="/category";
+    public static final String SEARCH ="/search";
 }

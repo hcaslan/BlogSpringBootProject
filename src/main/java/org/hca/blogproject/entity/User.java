@@ -22,22 +22,22 @@ public class User {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "firstname")
+    @Column(name = "firstname",columnDefinition = "varchar(32)")
     private String firstname;
 
-    @Column(name = "lastname")
+    @Column(name = "lastname",columnDefinition = "varchar(32)")
     private String lastname;
 
-    @Column(name = "email")
+    @Column(name = "email",columnDefinition = "varchar(64)")
     private String email;
 
-    @Column(name = "password")
+    @Column(name = "password",columnDefinition = "varchar(16)")
     private String password;
 
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Post> posts;
 
     @CreationTimestamp

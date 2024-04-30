@@ -8,7 +8,9 @@ import org.hca.blogproject.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
+/**
+ * @BusinessRules
+ */
 @Service
 @RequiredArgsConstructor
 public class UserBusinessRules {
@@ -18,7 +20,9 @@ public class UserBusinessRules {
     }
     public void checkIfEmailTakenBySomeoneElse(String email, Long user_id) {
         if (userRepository.existsByEmailAndIdNot(email, user_id)) throw new BusinessException(ErrorType.EMAIL_ALREADY_EXISTS);
-        //if (repository.existsByEmail(email)) throw new BusinessException(ErrorType.EMAIL_ALREADY_EXISTS);
+    }
+    public void checkIfEmailTakenBySomeoneElse(String email) {
+        if (userRepository.existsByEmail(email)) throw new BusinessException(ErrorType.EMAIL_ALREADY_EXISTS);
     }
     public void checkIfUserDeleted(Long id){
         Optional<User> optionalUser = userRepository.findById(id);

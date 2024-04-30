@@ -3,6 +3,7 @@ package org.hca.blogproject.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.hca.blogproject.dto.request.UserRequestDto;
+import org.hca.blogproject.dto.response.DetailedUserResponseDto;
 import org.hca.blogproject.dto.response.UserResponseDto;
 import org.hca.blogproject.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public class UserController {
 
     //findById
     @GetMapping(FIND_BY_ID)
-    public ResponseEntity<UserResponseDto> findById(@PathVariable Long id) {
+    public ResponseEntity<DetailedUserResponseDto> findById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.findDtoById(id));
     }
 
@@ -44,13 +45,13 @@ public class UserController {
     }
 
     //delete and remove from existence
-    @DeleteMapping(DELETE)
-    public ResponseEntity<UserResponseDto> deleteDto(@PathVariable Long id){
-        return ResponseEntity.ok(userService.deleteDto(id));
-    }
+//    @DeleteMapping(DELETE)
+//    public ResponseEntity<UserResponseDto> deleteDto(@PathVariable Long id){
+//        return ResponseEntity.ok(userService.deleteDto(id));
+//    }
 
-    //delete but continue to store in database
-    @PutMapping(SET_TO_DELETED)
+    //delete but continue to store in database. I thought it was better to mark it as deleted than to delete it completely.
+    @DeleteMapping(DELETE)
     public ResponseEntity<UserResponseDto> setToDeletedDto(@PathVariable Long id){
         return ResponseEntity.ok(userService.setToDeletedDto(id));
     }

@@ -22,9 +22,16 @@ public class CategoryService {
     private final CategoryBusinessRules categoryBusinessRules;
 
     public CategoryResponseDto saveDto(CategoryRequestDto dto) {
-        categoryBusinessRules.checkIfCategoryExistsByName(dto.name());
-
-        Category category = CategoryMapper.INSTANCE.categoryRequestDtoToCategory(dto);
+        Category category;
+        if(categoryBusinessRules.checkIfCategoryAlreadyExistsByName(dto.name())){
+            category = categoryRepository.findByName(dto.name());
+            category.setDeleted(false);
+            if(category.getDescription() == null){
+                category.setDescription(dto.description());
+            }
+        }else{
+            category = CategoryMapper.INSTANCE.categoryRequestDtoToCategory(dto);
+        }
         categoryRepository.save(category);
         return CategoryMapper.INSTANCE.categoryToCategoryResponseDto(category);
     }

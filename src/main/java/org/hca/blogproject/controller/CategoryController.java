@@ -22,6 +22,8 @@ import static org.hca.blogproject.constant.EndPoints.*;
 @RequiredArgsConstructor
 public class CategoryController {
     private final CategoryService categoryService;
+
+    //save
     @PostMapping
     public ResponseEntity<CategoryResponseDto> save(@RequestBody CategoryRequestDto dto) {
         return ResponseEntity.ok(categoryService.saveDto(dto));
@@ -46,13 +48,13 @@ public class CategoryController {
     }
 
     //delete and remove from existence
-    @DeleteMapping(DELETE)
-    public ResponseEntity<CategoryResponseDto> deleteDto(@PathVariable Long id){
-        return ResponseEntity.ok(categoryService.deleteDto(id));
-    }
+//    @DeleteMapping(DELETE)
+//    public ResponseEntity<CategoryResponseDto> deleteDto(@PathVariable Long id){
+//        return ResponseEntity.ok(categoryService.deleteDto(id));
+//    }
 
     //delete but continue to store in database
-    @PutMapping(SET_TO_DELETED)
+    @DeleteMapping(DELETE)
     public ResponseEntity<CategoryResponseDto> setToDeletedDto(@PathVariable Long id){
         return ResponseEntity.ok(categoryService.setToDeletedDto(id));
     }
