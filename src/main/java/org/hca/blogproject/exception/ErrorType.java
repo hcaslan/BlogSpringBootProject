@@ -13,6 +13,8 @@ public enum ErrorType {
     CATEGORY_DELETED(5003,"Category deleted, unreachable.",HttpStatus.I_AM_A_TEAPOT),
     CATEGORY_NOT_FOUND(5004,"Category not found",HttpStatus.I_AM_A_TEAPOT),
     CATEGORY_ALREADY_EXISTS(5005,"Category already exists",HttpStatus.I_AM_A_TEAPOT),
+    POST_NOT_FOUND(5006,"Post not found",HttpStatus.I_AM_A_TEAPOT),
+    POST_DELETED(5003,"Post deleted, unreachable.",HttpStatus.I_AM_A_TEAPOT),
 
     USERNAME_OR_PASSWORD_WRONG(5002,
             "Kullanıcı adı veya parola yanlış.",

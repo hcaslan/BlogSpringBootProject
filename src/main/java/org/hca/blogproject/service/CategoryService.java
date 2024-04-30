@@ -1,5 +1,6 @@
 package org.hca.blogproject.service;
 
+import lombok.RequiredArgsConstructor;
 import org.hca.blogproject.dto.request.CategoryRequestDto;
 import org.hca.blogproject.dto.response.CategoryResponseDto;
 import org.hca.blogproject.entity.Category;
@@ -14,16 +15,12 @@ import java.util.stream.Collectors;
 
 
 @Service
+@RequiredArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
     private final CategoryBusinessRules categoryBusinessRules;
-    
-    public CategoryService(CategoryRepository categoryRepository, CategoryMapper categoryMapper, CategoryBusinessRules categoryBusinessRules) {
-        this.categoryRepository = categoryRepository;
-        this.categoryMapper = categoryMapper;
-        this.categoryBusinessRules = categoryBusinessRules;
-    }
+
     public CategoryResponseDto saveDto(CategoryRequestDto dto) {
         categoryBusinessRules.checkIfCategoryExistsByName(dto.name());
 

@@ -33,9 +33,9 @@ public class Post {
     private User user;
 
     @Column(name = "is_deleted")
-    private Boolean isDeleted;
+    private boolean isDeleted;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "tblpost-category",
             joinColumns = @JoinColumn(name = "post_id"),

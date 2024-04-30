@@ -1,6 +1,7 @@
 package org.hca.blogproject.service.rules;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.hca.blogproject.entity.Category;
 import org.hca.blogproject.exception.BusinessException;
 import org.hca.blogproject.exception.ErrorType;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CategoryBusinessRules {
     private final CategoryRepository categoryRepository;
     public void checkIfCategoryExistsById(Long id) {

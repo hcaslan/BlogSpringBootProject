@@ -1,5 +1,6 @@
 package org.hca.blogproject.service;
 
+import lombok.RequiredArgsConstructor;
 import org.hca.blogproject.dto.request.UserRequestDto;
 import org.hca.blogproject.dto.response.UserResponseDto;
 import org.hca.blogproject.entity.User;
@@ -15,34 +16,32 @@ import java.util.stream.Collectors;
 
 
 @Service
+@RequiredArgsConstructor
 public class UserService{
     private final UserRepository userRepository;
-    private final UserBusinessRules businessRules;
+    private final UserBusinessRules userBusinessRules;
     private final UserMapper userMapper;
 
-    public UserService(UserRepository userRepository, UserBusinessRules businessRules, UserMapper userMapper) {
-        this.userRepository = userRepository;
-        this.businessRules = businessRules;
-        this.userMapper = userMapper;
-    }
     public UserResponseDto saveDto(UserRequestDto dto) {
         User user = UserMapper.INSTANCE.userRequestDtoToUser(dto);
-        businessRules.checkIfEmailTakenBySomeoneElse(user.getEmail(),user.getId());
+        userBusinessRules.checkIfEmailTakenBySomeoneElse(user.getEmail(),user.getId());
         userRepository.save(user);
         return UserMapper.INSTANCE.userToUserResponseDto(user);
     }
     public UserResponseDto updateDto(Long id, UserRequestDto request) {
-        businessRules.checkIfEmailTakenBySomeoneElse(request.email(),id);
-        businessRules.checkIfUserDeleted(id);
-        businessRules.checkIfUserExistsById(id);
+        userBusinessRules.checkIfEmailTakenBySomeoneElse(request.email(),id);
+        userBusinessRules.checkIfUserDeleted(id);
+        userBusinessRules.checkIfUserExistsById(id);
+
         User userToUpdate = UserMapper.INSTANCE.userRequestDtoToUser(request);
         userToUpdate.setId(id);
         userRepository.save(userToUpdate);
         return UserMapper.INSTANCE.userToUserResponseDto(userToUpdate);
     }
     public UserResponseDto findDtoById(Long id){
-        businessRules.checkIfUserDeleted(id);
-        businessRules.checkIfUserExistsById(id);
+        userBusinessRules.checkIfUserDeleted(id);
+        userBusinessRules.checkIfUserExistsById(id);
+
         return UserMapper.INSTANCE.userToUserResponseDto(userRepository.findById(id).get());//checked at business rules
     }
     public List<UserResponseDto> findAllDto() {
@@ -54,8 +53,9 @@ public class UserService{
     }
 
     public UserResponseDto setToDeletedDto(Long id) {
-        businessRules.checkIfUserDeleted(id);
-        businessRules.checkIfUserExistsById(id);
+        userBusinessRules.checkIfUserDeleted(id);
+        userBusinessRules.checkIfUserExistsById(id);
+
         User userToDelete = userRepository.findById(id).get();//checked at business rules
         userToDelete.setDeleted(true);
         userToDelete.setDeletedAt(LocalDateTime.now().toString());
@@ -64,7 +64,8 @@ public class UserService{
     }
 
     public UserResponseDto deleteDto(Long id) {
-        businessRules.checkIfUserExistsById(id);
+        userBusinessRules.checkIfUserExistsById(id);
+
         User userToDelete = userRepository.findById(id).get();//checked at business rules
         userRepository.delete(userToDelete);
         return UserMapper.INSTANCE.userToUserResponseDto(userToDelete);
