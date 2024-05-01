@@ -2,10 +2,12 @@ package org.hca.blogproject.service;
 
 import lombok.RequiredArgsConstructor;
 import org.hca.blogproject.dto.request.PostRequestDto;
+import org.hca.blogproject.dto.response.DetailedPostResponseDto;
 import org.hca.blogproject.dto.response.PostResponseDto;
-import org.hca.blogproject.entity.Category;
+import org.hca.blogproject.entity.Comment;
 import org.hca.blogproject.entity.Post;
 import org.hca.blogproject.mapper.CustomPostMapper;
+import org.hca.blogproject.repository.CommentRepository;
 import org.hca.blogproject.repository.PostRepository;
 import org.hca.blogproject.service.rules.CategoryBusinessRules;
 import org.hca.blogproject.service.rules.PostBusinessRules;
@@ -14,9 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -28,15 +28,18 @@ public class PostService {
     private final UserBusinessRules userBusinessRules;
     private final PostBusinessRules postBusinessRules;
     private final CategoryBusinessRules categoryBusinessRules;
+    private final UserService userService;
+    private final CustomPostMapper customMapper;
+    private final CommentRepository commentRepository;
 
 
     public PostResponseDto saveDto(PostRequestDto dto) {
         userBusinessRules.checkIfUserExistsById(dto.userId());
         userBusinessRules.checkIfUserDeleted(dto.userId());
 
-        Post post = customPostMapper.postRequestDtoToPost(dto);
+        Post post = customMapper.postRequestDtoToPost(dto);
         postRepository.save(post);
-        return customPostMapper.postToPostResponseDto(post);
+        return customMapper.postToPostResponseDto(post);
     }
 
 
@@ -44,46 +47,49 @@ public class PostService {
         return  postRepository.findAll()
                 .stream()
                 .filter(post ->!post.isDeleted())
-                .map(customPostMapper::postToPostResponseDto)
+                .map(customMapper::postToPostResponseDto)
                 .collect(Collectors.toList());
     }
 
-    public PostResponseDto findDtoById(Long id) {
+    public DetailedPostResponseDto findDetailedDtoById(Long id) {
         postBusinessRules.checkIfPostExistsById(id);
-        postBusinessRules.checkIfPostDeleted(id);
+        //postBusinessRules.checkIfPostDeleted(id);
 
-        return customPostMapper.postToPostResponseDto(postRepository.findById(id).get());//checked at business rules
+        return customPostMapper.postToDetailedPostResponseDto(postRepository.findById(id).get());//checked at business rules
     }
 
     public PostResponseDto updateDto(Long id, PostRequestDto request) {
         postBusinessRules.checkIfPostExistsById(id);
-        postBusinessRules.checkIfPostDeleted(id);
+        //postBusinessRules.checkIfPostDeleted(id);
 
-        Post postToUpdate = customPostMapper.postRequestDtoToPost(request);
+        Post postToUpdate = customMapper.postRequestDtoToPost(request);
         postToUpdate.setId(id);
         postRepository.save(postToUpdate);
-        return customPostMapper.postToPostResponseDto(postToUpdate);
+        return customMapper.postToPostResponseDto(postToUpdate);
     }
 
     public PostResponseDto deleteDto(Long id) {
         postBusinessRules.checkIfPostExistsById(id);
 
         Post postToDelete = postRepository.findById(id).get();//checked at business rules
-        List<Category> emptyList = new ArrayList<>();
-        postToDelete.setCategories(emptyList);
+        postToDelete.setCategories(new ArrayList<>());
+        postToDelete.setLikes(new ArrayList<>());
+        List<Comment> comments = postToDelete.getComments();
+        postToDelete.setComments(new ArrayList<>());
+        commentRepository.deleteAll(comments);
         postRepository.delete(postToDelete);
-        return customPostMapper.postToPostResponseDto(postToDelete);
+        return customMapper.postToPostResponseDto(postToDelete);
     }
 
     public PostResponseDto setToDeletedDto(Long id) {
         postBusinessRules.checkIfPostExistsById(id);
-        postBusinessRules.checkIfPostDeleted(id);
+        //postBusinessRules.checkIfPostDeleted(id);
 
         Post postToDelete = postRepository.findById(id).get();//checked at business rules
         postToDelete.setDeleted(true);
         postToDelete.setDeletedAt(LocalDateTime.now().toString());
         postRepository.save(postToDelete);
-        return customPostMapper.postToPostResponseDto(postToDelete);
+        return customMapper.postToPostResponseDto(postToDelete);
     }
 
     public List<PostResponseDto> findByUserId(Long id) {
@@ -118,4 +124,48 @@ public class PostService {
     }
 
 
+    public DetailedPostResponseDto like(Long userId, Long postId) {
+        userBusinessRules.checkIfUserExistsById(userId);
+        userBusinessRules.checkIfUserDeleted(userId);
+        postBusinessRules.checkIfPostExistsById(postId);
+        //postBusinessRules.checkIfPostDeleted(postId);
+        postBusinessRules.checkIfPostLikedByUser(userId, postId);
+        Post post = postRepository.findById(postId).get();//checked at business rules
+        post.getLikes().add(userService.findById(userId).get()); //checked at business rules
+        postRepository.save(post);
+        return customPostMapper.postToDetailedPostResponseDto(post);
+    }
+
+    public DetailedPostResponseDto unlike(Long userId, Long postId) {
+        userBusinessRules.checkIfUserExistsById(userId);
+        userBusinessRules.checkIfUserDeleted(userId);
+        postBusinessRules.checkIfPostExistsById(postId);
+        //postBusinessRules.checkIfPostDeleted(postId);
+        postBusinessRules.checkIfPostAlreadyLikedByUser(userId, postId);
+        Post post = postRepository.findById(postId).get();//checked at business rules
+        post.setLikes(post.getLikes().stream().filter(user -> !user.getId().equals((userId))).collect(Collectors.toList()));
+        postRepository.save(post);
+        return customPostMapper.postToDetailedPostResponseDto(post);
+    }
+
+    public PostResponseDto findDtoById(Long id) {
+        postBusinessRules.checkIfPostExistsById(id);
+        //postBusinessRules.checkIfPostDeleted(id);
+
+        return customMapper.postToPostResponseDto(postRepository.findById(id).get());//checked at business rules
+    }
+
+    public Post findById(Long id) {
+        postBusinessRules.checkIfPostExistsById(id);
+        //postBusinessRules.checkIfPostDeleted(id);
+        return postRepository.findById(id).get();//checked at business rules
+    }
+
+    public Post save(Post post) {
+        return postRepository.save(post);
+    }
+
+    public List<PostResponseDto> getPostsInChronologicalOrder() {
+        return customPostMapper.postListToPostResponseDtoList(postRepository.findAllByOrderByCreatedAtDesc());
+    }
 }

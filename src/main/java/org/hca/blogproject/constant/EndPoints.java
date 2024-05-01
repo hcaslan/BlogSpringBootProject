@@ -13,14 +13,19 @@ public class EndPoints {
     public static final String POST="/posts";
     public static final String CATEGORY="/categories";
     public static final String USER="/users";
+    public static final String COMMENT="/comments";
 
     //methods:
     public static final String UPDATE="/{id}";
     public static final String DELETE="/{id}";
     public static final String FIND_BY_ID="/{id}";
+    public static final String FIND_BY_NAME ="/categoryname";
     public static final String SET_TO_DELETED ="/settodeleted/{id}";
     public static final String GET_POSTS_BY_USER_ID ="user/{id}";
     public static final String GET_POSTS_BY_CATEGORY_ID ="/category/{id}";
     public static final String GET_POSTS_BY_CATEGORY_NAME ="/category";
     public static final String SEARCH ="/search";
+    public static final String LIKE ="/like";
+    public static final String UNLIKE ="/unlike";
+    public static final String GET_POSTS_IN_CHRONOLOGICAL_ORDER ="/chrono";
 }

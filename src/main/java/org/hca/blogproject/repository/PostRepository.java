@@ -22,4 +22,6 @@ public interface PostRepository extends JpaRepository<Post,Long> {
 
     @Query("SELECT p FROM Post p JOIN p.categories c WHERE c.name = :categoryName")
     List<Post> findByCategoryName(@Param("categoryName") String name);
+
+    List<Post> findAllByOrderByCreatedAtDesc();
 }

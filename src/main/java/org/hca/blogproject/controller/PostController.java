@@ -3,6 +3,7 @@ package org.hca.blogproject.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.hca.blogproject.dto.request.PostRequestDto;
+import org.hca.blogproject.dto.response.DetailedPostResponseDto;
 import org.hca.blogproject.dto.response.PostResponseDto;
 import org.hca.blogproject.service.PostService;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +31,8 @@ public class PostController {
 
     //findById
     @GetMapping(FIND_BY_ID)
-    public ResponseEntity<PostResponseDto> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(postService.findDtoById(id));
+    public ResponseEntity<DetailedPostResponseDto> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(postService.findDetailedDtoById(id));
     }
 
     //update
@@ -66,5 +67,17 @@ public class PostController {
     @GetMapping(SEARCH)
     public ResponseEntity<List<PostResponseDto>> search(@RequestParam String search){
         return ResponseEntity.ok(postService.search(search));
+    }
+    @PostMapping(LIKE)
+    public ResponseEntity<DetailedPostResponseDto> like(@RequestParam Long user_id, @RequestParam Long post_id){
+        return ResponseEntity.ok(postService.like(user_id,post_id));
+    }
+    @PostMapping(UNLIKE)
+    public ResponseEntity<DetailedPostResponseDto> unlike(@RequestParam Long user_id, @RequestParam Long post_id){
+        return ResponseEntity.ok(postService.unlike(user_id,post_id));
+    }
+    @GetMapping(GET_POSTS_IN_CHRONOLOGICAL_ORDER)
+    public ResponseEntity<List<PostResponseDto>> getPostsInChronologicalOrder(){
+        return ResponseEntity.ok(postService.getPostsInChronologicalOrder());
     }
 }

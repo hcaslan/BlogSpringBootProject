@@ -83,7 +83,13 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
-    public Category findCategoryByName(String categoryName) {
+    public Category findCategoryByNameReturnCategory(String categoryName) {
         return categoryRepository.findByName(categoryName);
     }
+    public CategoryResponseDto findCategoryByNameReturnDto(String categoryName) {
+        categoryBusinessRules.checkIfCategoryExistsByName(categoryName);
+
+        return categoryMapper.categoryToCategoryResponseDto(categoryRepository.findByName(categoryName));
+    }
+
 }

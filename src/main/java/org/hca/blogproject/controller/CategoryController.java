@@ -3,11 +3,7 @@ package org.hca.blogproject.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.hca.blogproject.dto.request.CategoryRequestDto;
-import org.hca.blogproject.dto.request.PostRequestDto;
-import org.hca.blogproject.dto.request.UserRequestDto;
 import org.hca.blogproject.dto.response.CategoryResponseDto;
-import org.hca.blogproject.dto.response.CategoryResponseDto;
-import org.hca.blogproject.dto.response.UserResponseDto;
 import org.hca.blogproject.service.CategoryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -57,5 +53,9 @@ public class CategoryController {
     @DeleteMapping(DELETE)
     public ResponseEntity<CategoryResponseDto> setToDeletedDto(@PathVariable Long id){
         return ResponseEntity.ok(categoryService.setToDeletedDto(id));
+    }
+    @GetMapping(FIND_BY_NAME)
+    public ResponseEntity<CategoryResponseDto> findByName(@RequestParam String Name) {
+        return ResponseEntity.ok(categoryService.findCategoryByNameReturnDto(Name));
     }
 }

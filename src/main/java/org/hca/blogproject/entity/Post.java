@@ -44,6 +44,17 @@ public class Post {
     )
     private List<Category> categories;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "tblpost-likes",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> likes;
+
+    @OneToMany(mappedBy = "post",fetch = FetchType.EAGER)
+    private List<Comment> comments;
+
     @CreationTimestamp
     @Column(name = "created_at")
     private String createdAt;
