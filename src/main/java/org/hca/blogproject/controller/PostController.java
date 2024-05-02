@@ -65,8 +65,8 @@ public class PostController {
         return ResponseEntity.ok(postService.findByCategoryName(category));
     }
     @GetMapping(SEARCH)
-    public ResponseEntity<List<PostResponseDto>> search(@RequestParam String search){
-        return ResponseEntity.ok(postService.search(search));
+    public ResponseEntity<List<PostResponseDto>> search(@RequestParam String searchKey){
+        return ResponseEntity.ok(postService.search(searchKey));
     }
     @PostMapping(LIKE)
     public ResponseEntity<DetailedPostResponseDto> like(@RequestParam Long user_id, @RequestParam Long post_id){

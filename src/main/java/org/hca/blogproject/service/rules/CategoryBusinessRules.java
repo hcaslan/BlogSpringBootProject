@@ -5,6 +5,7 @@ import org.hca.blogproject.entity.Category;
 import org.hca.blogproject.exception.BusinessException;
 import org.hca.blogproject.exception.ErrorType;
 import org.hca.blogproject.repository.CategoryRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -13,15 +14,18 @@ import java.util.Optional;
  * @BusinessRules
  */
 @Service
-@RequiredArgsConstructor
-public class CategoryBusinessRules {
+public class CategoryBusinessRules extends BusinessRulesManager<Category,Long>{
     private final CategoryRepository categoryRepository;
-    public void checkIfCategoryExistsById(Long id) {
-        if (!categoryRepository.existsById(id)) throw new BusinessException(ErrorType.CATEGORY_NOT_FOUND);
+
+    public CategoryBusinessRules(JpaRepository<Category, Long> jpaRepository, CategoryRepository categoryRepository) {
+        super(jpaRepository);
+        this.categoryRepository = categoryRepository;
     }
+
     public void checkIfCategoryExistsByName(String name) {
         if (!categoryRepository.existsByName(name)) throw new BusinessException(ErrorType.CATEGORY_NOT_FOUND);
     }
+
     public boolean checkIfCategoryAlreadyExistsByName(String name) {
         if (categoryRepository.existsByName(name)){
            if(!categoryRepository.findByName(name).isDeleted()){

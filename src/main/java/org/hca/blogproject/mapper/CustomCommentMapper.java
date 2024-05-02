@@ -26,6 +26,7 @@ public class CustomCommentMapper {
                 .commentContent(comment.getContent())
                 .post(customPostMapper.postToPostResponseDto(comment.getPost()))
                 .commenterName(comment.getUser().isDeleted() ? DELETED_USER : getUserFirstAndLastName(comment))
+                .createdAt(comment.getCreatedAt())
                 .build();
     }
     public CommentResponseDto commentToCommentResponseDto(Comment comment) {

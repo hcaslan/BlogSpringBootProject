@@ -23,6 +23,9 @@ public class Comment {
     @Column(name = "content",columnDefinition = "varchar(2048)")
     private String content;
 
+//    @Column(name = "is_deleted")
+//    private boolean isDeleted;
+
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
@@ -39,6 +42,6 @@ public class Comment {
     @Column(name = "updated_at")
     private String updatedAt;
 
-    @Column(name = "deleted_at")
-    private String deletedAt;
+//    @Column(name = "deleted_at")
+//    private String deletedAt;
 }

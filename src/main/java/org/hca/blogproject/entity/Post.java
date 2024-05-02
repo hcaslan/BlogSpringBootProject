@@ -33,8 +33,8 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "is_deleted")
-    private boolean isDeleted;
+//    @Column(name = "is_deleted")
+//    private boolean isDeleted;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -63,6 +63,6 @@ public class Post {
     @Column(name = "updated_at")
     private String updatedAt;
 
-    @Column(name = "deleted_at")
-    private String deletedAt;
+//    @Column(name = "deleted_at")
+//    private String deletedAt;
 }

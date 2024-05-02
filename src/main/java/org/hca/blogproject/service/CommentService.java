@@ -29,9 +29,9 @@ public class CommentService {
     private final CommentBusinessRules commentBusinessRules;
 
     public DetailedCommentResponseDto comment(CommentRequestDto request) {
-        userBusinessRules.checkIfUserExistsById(request.userId());
+        userBusinessRules.checkIfExistsById(request.userId());
         userBusinessRules.checkIfUserDeleted(request.userId());
-        postBusinessRules.checkIfPostExistsById(request.postId());
+        postBusinessRules.checkIfExistsById(request.postId());
         //postBusinessRules.checkIfPostDeleted(postId);
         Post post = postService.findById(request.postId());//checked at business rules
         User user = userService.findById(request.userId()).get(); //checked at business rules
@@ -51,7 +51,7 @@ public class CommentService {
     }
 
     public CommentResponseDto delete(Long id) {
-        commentBusinessRules.checkIfCommentExistsById(id);
+        commentBusinessRules.checkIfExistsById(id);
 
         Comment commentToDelete = commentRepository.findById(id).get();//checked at business rules
         CommentResponseDto commentResponseDto = customCommentMapper.commentToCommentResponseDto(commentToDelete);

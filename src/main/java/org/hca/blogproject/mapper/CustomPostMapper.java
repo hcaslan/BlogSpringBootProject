@@ -51,12 +51,13 @@ public class CustomPostMapper {
                     .postWriterName(post.getUser().isDeleted() ? DELETED_USER : getUserFirstAndLastName(post.getUser()))
                     .likes(likes)
                     .commentList(commentResponseDtoList)
+                    .createdAt(post.getCreatedAt())
                     .build();
     }
 
 
     public Post postRequestDtoToPost(PostRequestDto dto) {
-        userBusinessRules.checkIfUserExistsById(dto.userId());
+        userBusinessRules.checkIfExistsById(dto.userId());
         List<Category> categoryList = dto.categories().stream()
                 .flatMap(categoryName -> {
                     List<Category> categories = new ArrayList<>();

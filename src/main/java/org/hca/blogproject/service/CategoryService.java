@@ -39,7 +39,7 @@ public class CategoryService {
     public CategoryResponseDto updateDto(Long id, CategoryRequestDto request) {
         categoryBusinessRules.checkIfCategoryNameTakenBySomeoneElse(request.name(), id);
         categoryBusinessRules.checkIfCategoryDeleted(id);
-        categoryBusinessRules.checkIfCategoryExistsById(id);
+        categoryBusinessRules.checkIfExistsById(id);
 
         Category categoryToUpdate = CategoryMapper.INSTANCE.categoryRequestDtoToCategory(request);
         categoryToUpdate.setId(id);
@@ -48,7 +48,7 @@ public class CategoryService {
     }
     public CategoryResponseDto findDtoById(Long id){
         categoryBusinessRules.checkIfCategoryDeleted(id);
-        categoryBusinessRules.checkIfCategoryExistsById(id);
+        categoryBusinessRules.checkIfExistsById(id);
 
         return CategoryMapper.INSTANCE.categoryToCategoryResponseDto(categoryRepository.findById(id).get());//checked at business rules
     }
@@ -62,7 +62,7 @@ public class CategoryService {
 
     public CategoryResponseDto setToDeletedDto(Long id) {
         categoryBusinessRules.checkIfCategoryDeleted(id);
-        categoryBusinessRules.checkIfCategoryExistsById(id);
+        categoryBusinessRules.checkIfExistsById(id);
 
         Category categoryToDelete = categoryRepository.findById(id).get();//checked at business rules
         categoryToDelete.setDeleted(true);
@@ -72,7 +72,7 @@ public class CategoryService {
     }
 
     public CategoryResponseDto deleteDto(Long id) {
-        categoryBusinessRules.checkIfCategoryExistsById(id);
+        categoryBusinessRules.checkIfExistsById(id);
 
         Category categoryToDelete = categoryRepository.findById(id).get();//checked at business rules
         categoryRepository.delete(categoryToDelete);

@@ -34,7 +34,7 @@ public class UserService{
     public UserResponseDto updateDto(Long id, UserRequestDto request) {
         userBusinessRules.checkIfEmailTakenBySomeoneElse(request.email(),id);
         userBusinessRules.checkIfUserDeleted(id);
-        userBusinessRules.checkIfUserExistsById(id);
+        userBusinessRules.checkIfExistsById(id);
 
         User userToUpdate = UserMapper.INSTANCE.userRequestDtoToUser(request);
         userToUpdate.setId(id);
@@ -43,7 +43,7 @@ public class UserService{
     }
     public DetailedUserResponseDto findDtoById(Long id){
         userBusinessRules.checkIfUserDeleted(id);
-        userBusinessRules.checkIfUserExistsById(id);
+        userBusinessRules.checkIfExistsById(id);
 
         return customUserMapper.userToDetailedUserResponseDto(userRepository.findById(id).get());//checked at business rules
     }
@@ -57,7 +57,7 @@ public class UserService{
 
     public UserResponseDto setToDeletedDto(Long id) {
         userBusinessRules.checkIfUserDeleted(id);
-        userBusinessRules.checkIfUserExistsById(id);
+        userBusinessRules.checkIfExistsById(id);
 
         User userToDelete = userRepository.findById(id).get();//checked at business rules
         userToDelete.setDeleted(true);
@@ -67,7 +67,7 @@ public class UserService{
     }
 
     public UserResponseDto deleteDto(Long id) {
-        userBusinessRules.checkIfUserExistsById(id);
+        userBusinessRules.checkIfExistsById(id);
 
         User userToDelete = userRepository.findById(id).get();//checked at business rules
         userRepository.delete(userToDelete);
