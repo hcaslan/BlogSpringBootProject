@@ -1,4 +1,3 @@
 # Todo:
-- Exceptionları genericleştir
-- BusinessRules'ları genericleştir
+- Detaylı bir test yap. 
 - ReadMe.md dosyası hazırla !
