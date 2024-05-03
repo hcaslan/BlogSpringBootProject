@@ -22,6 +22,7 @@ public class EndPoints {
     public static final String FIND_BY_NAME ="/categoryName";
     public static final String SET_TO_DELETED ="/setToDeleted/{id}";
     public static final String GET_POSTS_BY_USER_ID ="user/{userId}";
+    public static final String REACTIVATE_USER ="/reActivateUser/{id}";
     public static final String GET_POSTS_BY_CATEGORY_ID ="/category/{categoryId}";
     public static final String GET_POSTS_BY_CATEGORY_NAME ="/searchByCategoryName";
     public static final String SEARCH ="/searchByKeyword";

@@ -28,10 +28,10 @@ public class User {
     @Column(name = "lastname",columnDefinition = "varchar(32)")
     private String lastname;
 
-    @Column(name = "email",columnDefinition = "varchar(64)")
+    @Column(name = "email",columnDefinition = "varchar(64)", nullable = false)
     private String email;
 
-    @Column(name = "password",columnDefinition = "varchar(16)")
+    @Column(name = "password",columnDefinition = "varchar(16)", nullable = false)
     private String password;
 
     @Column(name = "is_deleted")

@@ -20,7 +20,7 @@ public class Category {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name",columnDefinition = "varchar(32)")
+    @Column(name = "name",columnDefinition = "varchar(32)", nullable = false)
     private String name;
 
     @Column(name = "description",columnDefinition = "varchar(128)")

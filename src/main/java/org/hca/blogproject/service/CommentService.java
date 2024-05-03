@@ -8,7 +8,6 @@ import org.hca.blogproject.entity.Comment;
 import org.hca.blogproject.entity.Post;
 import org.hca.blogproject.entity.User;
 import org.hca.blogproject.mapper.CustomCommentMapper;
-import org.hca.blogproject.mapper.CustomUserMapper;
 import org.hca.blogproject.repository.CommentRepository;
 import org.hca.blogproject.service.rules.CommentBusinessRules;
 import org.hca.blogproject.service.rules.PostBusinessRules;
@@ -23,31 +22,23 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final UserBusinessRules userBusinessRules;
     private final PostBusinessRules postBusinessRules;
-    private final PostService postService;
-    private final UserService userService;
     private final CustomCommentMapper customCommentMapper;
     private final CommentBusinessRules commentBusinessRules;
 
     public DetailedCommentResponseDto comment(CommentRequestDto request) {
-        userBusinessRules.checkIfExistsById(request.userId());
-        userBusinessRules.checkIfUserDeleted(request.userId());
-        postBusinessRules.checkIfExistsById(request.postId());
-        //postBusinessRules.checkIfPostDeleted(postId);
-        Post post = postService.findById(request.postId());//checked at business rules
-        User user = userService.findById(request.userId()).get(); //checked at business rules
-        Comment comment = Comment.builder()
-                .post(post)
-                .user(user)
-                .content(request.content())
-                .build();
-        commentRepository.save(comment);
-        post.getComments().add(comment);
-        postService.save(post);
-        return customCommentMapper.commentToDetailedCommentResponseDto(comment);
+        Comment commentToSave = checkCommentWithRulesToSave(request);
+
+        commentRepository.save(commentToSave);
+        return customCommentMapper.commentToDetailedCommentResponseDto(commentToSave);
     }
 
-    public Comment save(Comment comment){
-        return commentRepository.save(comment);
+    public CommentResponseDto updateDto(Long id, CommentRequestDto request) {
+        commentBusinessRules.checkIfExistsById(id);
+        Comment commentToUpdate = checkCommentWithRulesToSave(request);
+
+        commentToUpdate.setId(id);
+        commentRepository.save(commentToUpdate);
+        return customCommentMapper.commentToCommentResponseDto(commentToUpdate);
     }
 
     public CommentResponseDto delete(Long id) {
@@ -61,5 +52,26 @@ public class CommentService {
 
     public List<DetailedCommentResponseDto> findAll() {
         return customCommentMapper.commentListToDetailedCommentResponseDtoList(commentRepository.findAll());
+    }
+
+    public DetailedCommentResponseDto findDetailedDtoById(Long id) {
+        commentBusinessRules.checkIfExistsById(id);
+
+        return customCommentMapper.commentToDetailedCommentResponseDto(commentRepository.findById(id).get()); //checked at business rules
+    }
+
+    private Comment checkCommentWithRulesToSave(CommentRequestDto request) {
+        Post dumyPost = new Post();
+        User dumyUser = new User();
+        userBusinessRules.checkIfNull(request.userId());
+        postBusinessRules.checkIfNull(request.postId());
+        commentBusinessRules.checkIfNull(request.content());
+        userBusinessRules.checkIfExistsById(request.userId(),dumyUser);
+        userBusinessRules.checkIfUserDeleted(request.userId());
+        postBusinessRules.checkIfExistsById(request.postId(),dumyPost);
+
+        Comment commentToCheck = customCommentMapper.commentRequestDtoToComment(request);
+        commentBusinessRules.validateCommentFieldLengths(commentToCheck);
+        return commentToCheck;
     }
 }

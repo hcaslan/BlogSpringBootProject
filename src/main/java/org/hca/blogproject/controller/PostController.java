@@ -31,7 +31,7 @@ public class PostController {
 
     //findById
     @GetMapping(FIND_BY_ID)
-    public ResponseEntity<DetailedPostResponseDto> findById(@PathVariable Long id) {
+    public ResponseEntity<DetailedPostResponseDto> findDetailedDtoById(@PathVariable Long id) {
         return ResponseEntity.ok(postService.findDetailedDtoById(id));
     }
 
@@ -53,12 +53,12 @@ public class PostController {
 //        return ResponseEntity.ok(postService.setToDeletedDto(id));
 //    }
     @GetMapping(GET_POSTS_BY_USER_ID)
-    public ResponseEntity<List<PostResponseDto>> findByUserId(@PathVariable Long id){
-        return ResponseEntity.ok(postService.findByUserId(id));
+    public ResponseEntity<List<PostResponseDto>> findByUserId(@PathVariable Long userId){
+        return ResponseEntity.ok(postService.findByUserId(userId));
     }
     @GetMapping(GET_POSTS_BY_CATEGORY_ID)
-    public ResponseEntity<List<PostResponseDto>> findByCategoryId(@PathVariable Long id){
-        return ResponseEntity.ok(postService.findByCategoryId(id));
+    public ResponseEntity<List<PostResponseDto>> findByCategoryId(@PathVariable Long categoryId){
+        return ResponseEntity.ok(postService.findByCategoryId(categoryId));
     }
     @GetMapping(GET_POSTS_BY_CATEGORY_NAME)
     public ResponseEntity<List<PostResponseDto>> findByCategoryName(@RequestParam String category){

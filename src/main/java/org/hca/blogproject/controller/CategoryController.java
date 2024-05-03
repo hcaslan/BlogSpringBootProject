@@ -33,7 +33,7 @@ public class CategoryController {
 
     //findById
     @GetMapping(FIND_BY_ID)
-    public ResponseEntity<CategoryResponseDto> findById(@PathVariable Long id) {
+    public ResponseEntity<CategoryResponseDto> findDtoById(@PathVariable Long id) {
         return ResponseEntity.ok(categoryService.findDtoById(id));
     }
 
@@ -58,4 +58,5 @@ public class CategoryController {
     public ResponseEntity<CategoryResponseDto> findByName(@RequestParam String Name) {
         return ResponseEntity.ok(categoryService.findCategoryByNameReturnDto(Name));
     }
+
 }

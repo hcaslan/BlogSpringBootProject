@@ -1,20 +1,21 @@
 package org.hca.blogproject.service.rules;
 
-import lombok.RequiredArgsConstructor;
 import org.hca.blogproject.entity.Post;
 import org.hca.blogproject.exception.BusinessException;
 import org.hca.blogproject.exception.ErrorType;
 import org.hca.blogproject.repository.PostRepository;
+import org.hca.blogproject.utility.BusinessRulesManager;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Optional;
+
 /**
  * @BusinessRules
  */
 @Service
-public class PostBusinessRules extends BusinessRulesManager<Post,Long>{
+public class PostBusinessRules extends BusinessRulesManager<Post,Long> {
     private final PostRepository postRepository;
     private final UserBusinessRules userBusinessRules;
 
@@ -22,6 +23,16 @@ public class PostBusinessRules extends BusinessRulesManager<Post,Long>{
         super(jpaRepository);
         this.postRepository = postRepository;
         this.userBusinessRules = userBusinessRules;
+    }
+    public void validatePostFieldLengths(Post post){
+        try{
+            Field contentField = post.getClass().getDeclaredField("content");
+            validateFieldLength(post.getContent(),contentField);
+            Field titleField = post.getClass().getDeclaredField("title");
+            validateFieldLength(post.getTitle(),titleField);
+        }catch (NoSuchFieldException e){
+            throw new BusinessException(ErrorType.FIELD_ERROR);
+        }
     }
 
     public void checkIfPostListEmpty(List<Post> posts){

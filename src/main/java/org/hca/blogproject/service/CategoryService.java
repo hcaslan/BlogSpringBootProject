@@ -22,36 +22,45 @@ public class CategoryService {
     private final CategoryBusinessRules categoryBusinessRules;
 
     public CategoryResponseDto saveDto(CategoryRequestDto dto) {
+        categoryBusinessRules.checkIfNull(dto.name());
+
         Category category;
-        if(categoryBusinessRules.checkIfCategoryAlreadyExistsByName(dto.name())){
-            category = categoryRepository.findByName(dto.name());
+        if(categoryBusinessRules.isCategoryAlreadyExistsByName(dto.name())){
+            category = categoryRepository.findByName(dto.name()).get(); //checked at line 28
             category.setDeleted(false);
+            category.setDeletedAt(null);
             if(category.getDescription() == null){
                 category.setDescription(dto.description());
             }
         }else{
             category = CategoryMapper.INSTANCE.categoryRequestDtoToCategory(dto);
+            categoryBusinessRules.validateCategoryFieldLengths(category);
         }
         categoryRepository.save(category);
         return CategoryMapper.INSTANCE.categoryToCategoryResponseDto(category);
     }
     
     public CategoryResponseDto updateDto(Long id, CategoryRequestDto request) {
+        categoryBusinessRules.checkIfNull(request.name());
         categoryBusinessRules.checkIfCategoryNameTakenBySomeoneElse(request.name(), id);
         categoryBusinessRules.checkIfCategoryDeleted(id);
         categoryBusinessRules.checkIfExistsById(id);
 
         Category categoryToUpdate = CategoryMapper.INSTANCE.categoryRequestDtoToCategory(request);
+        categoryBusinessRules.validateCategoryFieldLengths(categoryToUpdate);
+
         categoryToUpdate.setId(id);
         categoryRepository.save(categoryToUpdate);
         return CategoryMapper.INSTANCE.categoryToCategoryResponseDto(categoryToUpdate);
     }
+
     public CategoryResponseDto findDtoById(Long id){
-        categoryBusinessRules.checkIfCategoryDeleted(id);
         categoryBusinessRules.checkIfExistsById(id);
+        categoryBusinessRules.checkIfCategoryDeleted(id);
 
         return CategoryMapper.INSTANCE.categoryToCategoryResponseDto(categoryRepository.findById(id).get());//checked at business rules
     }
+
     public List<CategoryResponseDto> findAllDto() {
         return  categoryRepository.findAll()
                 .stream()
@@ -61,8 +70,8 @@ public class CategoryService {
     }
 
     public CategoryResponseDto setToDeletedDto(Long id) {
-        categoryBusinessRules.checkIfCategoryDeleted(id);
         categoryBusinessRules.checkIfExistsById(id);
+        categoryBusinessRules.checkIfCategoryDeleted(id);
 
         Category categoryToDelete = categoryRepository.findById(id).get();//checked at business rules
         categoryToDelete.setDeleted(true);
@@ -71,25 +80,28 @@ public class CategoryService {
         return CategoryMapper.INSTANCE.categoryToCategoryResponseDto(categoryToDelete);
     }
 
-    public CategoryResponseDto deleteDto(Long id) {
-        categoryBusinessRules.checkIfExistsById(id);
-
-        Category categoryToDelete = categoryRepository.findById(id).get();//checked at business rules
-        categoryRepository.delete(categoryToDelete);
-        return CategoryMapper.INSTANCE.categoryToCategoryResponseDto(categoryToDelete);
-    }
-
     public Category save(Category category){
+        categoryBusinessRules.checkIfNull(category.getName());
+
         return categoryRepository.save(category);
     }
 
     public Category findCategoryByNameReturnCategory(String categoryName) {
-        return categoryRepository.findByName(categoryName);
+        categoryBusinessRules.checkIfCategoryExistsByName(categoryName);
+
+        return categoryRepository.findByName(categoryName).get(); //checked at business rules
     }
+
     public CategoryResponseDto findCategoryByNameReturnDto(String categoryName) {
         categoryBusinessRules.checkIfCategoryExistsByName(categoryName);
 
-        return categoryMapper.categoryToCategoryResponseDto(categoryRepository.findByName(categoryName));
+        return categoryMapper.categoryToCategoryResponseDto(categoryRepository.findByName(categoryName).get());//checked at business rules
     }
-
+//    public CategoryResponseDto deleteDto(Long id) {
+//        categoryBusinessRules.checkIfExistsById(id);
+//
+//        Category categoryToDelete = categoryRepository.findById(id).get();//checked at business rules
+//        categoryRepository.delete(categoryToDelete);
+//        return CategoryMapper.INSTANCE.categoryToCategoryResponseDto(categoryToDelete);
+//    }
 }

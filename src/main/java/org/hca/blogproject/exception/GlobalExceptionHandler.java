@@ -14,7 +14,13 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ErrorMessage> handleDemoException(BusinessException ex) {
+    public ResponseEntity<ErrorMessage> handleBusinessException(BusinessException ex) {
+        ErrorType errorType = ex.getErrorType();
+        return new ResponseEntity<>(createErrorMessage(ex),
+                errorType.getHttpStatus());
+    }
+    @ExceptionHandler(DataBaseException.class)
+    public ResponseEntity<ErrorMessage> handleDataBaseException(DataBaseException ex) {
         ErrorType errorType = ex.getErrorType();
         return new ResponseEntity<>(createErrorMessage(ex),
                 errorType.getHttpStatus());
@@ -27,7 +33,12 @@ public class GlobalExceptionHandler {
                 .build();
     }
 
-
+    private ErrorMessage createErrorMessage(DataBaseException ex) {
+        return ErrorMessage.builder()
+                .code(ex.getErrorType().getCode())
+                .message(ex.getMessage())
+                .build();
+    }
 
 
 }

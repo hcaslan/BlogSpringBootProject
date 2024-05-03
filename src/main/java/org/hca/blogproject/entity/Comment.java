@@ -20,18 +20,18 @@ public class Comment {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "content",columnDefinition = "varchar(2048)")
+    @Column(name = "content",columnDefinition = "varchar(2048)", nullable = false)
     private String content;
 
 //    @Column(name = "is_deleted")
 //    private boolean isDeleted;
 
     @ManyToOne
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @CreationTimestamp

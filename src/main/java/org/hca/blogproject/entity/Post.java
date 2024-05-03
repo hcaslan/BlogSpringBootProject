@@ -23,10 +23,10 @@ public class Post {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "title",columnDefinition = "varchar(64)")
+    @Column(name = "title",columnDefinition = "varchar(64)", nullable = false)
     private String title;
 
-    @Column(name = "content",columnDefinition = "varchar(2048)")
+    @Column(name = "content",columnDefinition = "varchar(2048)", nullable = false)
     private String content;
 
     @ManyToOne
@@ -52,7 +52,7 @@ public class Post {
     )
     private List<User> likes;
 
-    @OneToMany(mappedBy = "post",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "post",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Comment> comments;
 
     @CreationTimestamp

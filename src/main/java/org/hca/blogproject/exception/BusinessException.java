@@ -12,7 +12,7 @@ public class BusinessException extends RuntimeException{
     }
 
     public BusinessException(ErrorType errorType, String customMessage) {
-        super(customMessage);
+        super(errorType.getMessage() + " " + customMessage);
         this.errorType = errorType;
     }
 }

@@ -6,6 +6,7 @@ import org.hca.blogproject.dto.response.DetailedPostResponseDto;
 import org.hca.blogproject.dto.response.PostResponseDto;
 import org.hca.blogproject.entity.Comment;
 import org.hca.blogproject.entity.Post;
+import org.hca.blogproject.entity.User;
 import org.hca.blogproject.mapper.CustomPostMapper;
 import org.hca.blogproject.repository.CommentRepository;
 import org.hca.blogproject.repository.PostRepository;
@@ -14,7 +15,6 @@ import org.hca.blogproject.service.rules.PostBusinessRules;
 import org.hca.blogproject.service.rules.UserBusinessRules;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,39 +33,33 @@ public class PostService {
     private final CommentRepository commentRepository;
 
 
-    public PostResponseDto saveDto(PostRequestDto dto) {
-        userBusinessRules.checkIfExistsById(dto.userId());
-        userBusinessRules.checkIfUserDeleted(dto.userId());
+    public PostResponseDto saveDto(PostRequestDto request) {
+        Post postToSave = checkPostWithRulesToSave(request);
 
-        Post post = customMapper.postRequestDtoToPost(dto);
-        postRepository.save(post);
-        return customMapper.postToPostResponseDto(post);
-    }
-
-
-    public List<PostResponseDto> findAllDto() {
-        return  postRepository.findAll()
-                .stream()
-//                .filter(post ->!post.isDeleted())
-                .map(customMapper::postToPostResponseDto)
-                .collect(Collectors.toList());
-    }
-
-    public DetailedPostResponseDto findDetailedDtoById(Long id) {
-        postBusinessRules.checkIfExistsById(id);
-        //postBusinessRules.checkIfPostDeleted(id);
-
-        return customPostMapper.postToDetailedPostResponseDto(postRepository.findById(id).get());//checked at business rules
+        postRepository.save(postToSave);
+        return customMapper.postToPostResponseDto(postToSave);
     }
 
     public PostResponseDto updateDto(Long id, PostRequestDto request) {
         postBusinessRules.checkIfExistsById(id);
-        //postBusinessRules.checkIfPostDeleted(id);
+        Post postToUpdate = checkPostWithRulesToSave(request);
 
-        Post postToUpdate = customMapper.postRequestDtoToPost(request);
         postToUpdate.setId(id);
         postRepository.save(postToUpdate);
         return customMapper.postToPostResponseDto(postToUpdate);
+    }
+
+    public DetailedPostResponseDto findDetailedDtoById(Long id) {
+        postBusinessRules.checkIfExistsById(id);
+
+        return customPostMapper.postToDetailedPostResponseDto(postRepository.findById(id).get());//checked at business rules
+    }
+
+    public List<PostResponseDto> findAllDto() {
+        return  postRepository.findAll()
+                .stream()
+                .map(customMapper::postToPostResponseDto)
+                .collect(Collectors.toList());
     }
 
     public PostResponseDto deleteDto(Long id) {
@@ -81,19 +75,10 @@ public class PostService {
         return customMapper.postToPostResponseDto(postToDelete);
     }
 
-//    public PostResponseDto setToDeletedDto(Long id) {
-//        postBusinessRules.checkIfExistsById(id);
-//        //postBusinessRules.checkIfPostDeleted(id);
-//
-//        Post postToDelete = postRepository.findById(id).get();//checked at business rules
-//        postToDelete.setDeleted(true);
-//        postToDelete.setDeletedAt(LocalDateTime.now().toString());
-//        postRepository.save(postToDelete);
-//        return customMapper.postToPostResponseDto(postToDelete);
-//    }
-
     public List<PostResponseDto> findByUserId(Long id) {
         userBusinessRules.checkIfExistsById(id);
+        userBusinessRules.checkIfUserDeleted(id);
+
         List<Post> postList = postRepository.findByUserId(id);
         postBusinessRules.checkIfPostListEmpty(postList);
 
@@ -102,6 +87,8 @@ public class PostService {
 
     public List<PostResponseDto> findByCategoryId(Long id) {
         categoryBusinessRules.checkIfExistsById(id);
+        categoryBusinessRules.checkIfCategoryDeleted(id);
+
         List<Post> postList = postRepository.findByCategoryId(id);
         postBusinessRules.checkIfPostListEmpty(postList);
 
@@ -117,55 +104,77 @@ public class PostService {
 
     public List<PostResponseDto> findByCategoryName(String name) {
         categoryBusinessRules.checkIfCategoryExistsByName(name);
+        categoryBusinessRules.checkIfCategoryDeleted(name);
+
         List<Post> postList = postRepository.findByCategoryName(name);
         postBusinessRules.checkIfPostListEmpty(postList);
 
         return customPostMapper.postListToPostResponseDtoList(postList);
     }
 
-
     public DetailedPostResponseDto like(Long userId, Long postId) {
-        userBusinessRules.checkIfExistsById(userId);
+        Post dumyPost = new Post();
+        User dumyUser = new User();
+        userBusinessRules.checkIfExistsById(userId,dumyUser);
         userBusinessRules.checkIfUserDeleted(userId);
-        postBusinessRules.checkIfExistsById(postId);
-        //postBusinessRules.checkIfPostDeleted(postId);
+        postBusinessRules.checkIfExistsById(postId,dumyPost);
         postBusinessRules.checkIfPostLikedByUser(userId, postId);
-        Post post = postRepository.findById(postId).get();//checked at business rules
-        post.getLikes().add(userService.findById(userId).get()); //checked at business rules
-        postRepository.save(post);
-        return customPostMapper.postToDetailedPostResponseDto(post);
+
+        Post postToLike = postRepository.findById(postId).get();//checked at business rules
+        postToLike.getLikes().add(userService.findById(userId).get()); //checked at business rules
+        postRepository.save(postToLike);
+        return customPostMapper.postToDetailedPostResponseDto(postToLike);
     }
 
     public DetailedPostResponseDto unlike(Long userId, Long postId) {
-        userBusinessRules.checkIfExistsById(userId);
+        Post dumyPost = new Post();
+        User dumyUser = new User();
+        userBusinessRules.checkIfExistsById(userId,dumyUser);
         userBusinessRules.checkIfUserDeleted(userId);
-        postBusinessRules.checkIfExistsById(postId);
-        //postBusinessRules.checkIfPostDeleted(postId);
+        postBusinessRules.checkIfExistsById(postId,dumyPost);
         postBusinessRules.checkIfPostAlreadyLikedByUser(userId, postId);
-        Post post = postRepository.findById(postId).get();//checked at business rules
-        post.setLikes(post.getLikes().stream().filter(user -> !user.getId().equals((userId))).collect(Collectors.toList()));
-        postRepository.save(post);
-        return customPostMapper.postToDetailedPostResponseDto(post);
-    }
 
-    public PostResponseDto findDtoById(Long id) {
-        postBusinessRules.checkIfExistsById(id);
-        //postBusinessRules.checkIfPostDeleted(id);
-
-        return customMapper.postToPostResponseDto(postRepository.findById(id).get());//checked at business rules
+        Post postToLike = postRepository.findById(postId).get();//checked at business rules
+        postToLike.setLikes(postToLike.getLikes().stream().filter(userToUnlike -> !userToUnlike.getId().equals((userId))).collect(Collectors.toList()));
+        postRepository.save(postToLike);
+        return customPostMapper.postToDetailedPostResponseDto(postToLike);
     }
 
     public Post findById(Long id) {
         postBusinessRules.checkIfExistsById(id);
-        //postBusinessRules.checkIfPostDeleted(id);
-        return postRepository.findById(id).get();//checked at business rules
-    }
 
-    public Post save(Post post) {
-        return postRepository.save(post);
+        return postRepository.findById(id).get();//checked at business rules
     }
 
     public List<PostResponseDto> getPostsInChronologicalOrder() {
         return customPostMapper.postListToPostResponseDtoList(postRepository.findAllByOrderByCreatedAtDesc());
     }
+
+    private Post checkPostWithRulesToSave(PostRequestDto request) {
+        postBusinessRules.checkIfNull(request.title());
+        postBusinessRules.checkIfNull(request.content());
+        userBusinessRules.checkIfNull(request.userId());
+        userBusinessRules.checkIfExistsById(request.userId());
+        userBusinessRules.checkIfUserDeleted(request.userId());
+        Post postToCheck = customMapper.postRequestDtoToPost(request);
+        postBusinessRules.validatePostFieldLengths(postToCheck);
+        return postToCheck;
+    }
+
+//    public PostResponseDto findDtoById(Long id) {
+//        postBusinessRules.checkIfNull(id);
+//        postBusinessRules.checkIfExistsById(id);
+//
+//        return customMapper.postToPostResponseDto(postRepository.findById(id).get());//checked at business rules
+//    }
+
+//    public Post save(Post post) {
+//        userBusinessRules.checkIfNull(post.getUser().getId());
+//        userBusinessRules.checkIfExistsById(post.getUser().getId());
+//        userBusinessRules.checkIfUserDeleted(post.getUser().getId());
+//        postBusinessRules.checkIfNull(post.getTitle());
+//        postBusinessRules.checkIfNull(post.getContent());
+//
+//        return postRepository.save(post);
+//    }
 }

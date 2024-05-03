@@ -7,6 +7,7 @@ import org.hca.blogproject.dto.response.DetailedUserResponseDto;
 import org.hca.blogproject.dto.response.UserResponseDto;
 import org.hca.blogproject.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class UserController {
 
     //save
     @PostMapping
-    public ResponseEntity<UserResponseDto> save(@RequestBody UserRequestDto dto) {
+    public ResponseEntity<UserResponseDto> save(@Valid @RequestBody UserRequestDto dto) {
         return ResponseEntity.ok(userService.saveDto(dto));
     }
 
@@ -54,5 +55,10 @@ public class UserController {
     @DeleteMapping(DELETE)
     public ResponseEntity<UserResponseDto> setToDeletedDto(@PathVariable Long id){
         return ResponseEntity.ok(userService.setToDeletedDto(id));
+    }
+
+    @PostMapping(REACTIVATE_USER)
+    public ResponseEntity<UserResponseDto> reActivateUser(@PathVariable Long id){
+        return ResponseEntity.ok(userService.reActivateUser(id));
     }
 }

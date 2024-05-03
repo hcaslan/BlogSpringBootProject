@@ -1,5 +1,6 @@
 package org.hca.blogproject.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.hca.blogproject.dto.request.CommentRequestDto;
 import org.hca.blogproject.dto.response.CommentResponseDto;
@@ -29,5 +30,14 @@ public class CommentController {
     @GetMapping
     public ResponseEntity<List<DetailedCommentResponseDto>> findAll(){
         return ResponseEntity.ok(commentService.findAll());
+    }
+    @PutMapping(UPDATE)
+    public ResponseEntity<CommentResponseDto> update(@PathVariable Long id, @Valid @RequestBody CommentRequestDto request){
+        return ResponseEntity.ok(commentService.updateDto(id,request));
+    }
+
+    @GetMapping(FIND_BY_ID)
+    public ResponseEntity<DetailedCommentResponseDto> findDetailedDtoById(@PathVariable Long id) {
+        return ResponseEntity.ok(commentService.findDetailedDtoById(id));
     }
 }
