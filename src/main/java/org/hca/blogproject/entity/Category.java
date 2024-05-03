@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.hca.blogproject.utility.MinLength;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -21,6 +22,7 @@ public class Category {
     private Long id;
 
     @Column(name = "name",columnDefinition = "varchar(32)", nullable = false)
+    @MinLength(value = 2)
     private String name;
 
     @Column(name = "description",columnDefinition = "varchar(128)")

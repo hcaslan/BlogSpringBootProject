@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.hca.blogproject.utility.MinLength;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -23,15 +24,18 @@ public class User {
     private Long id;
 
     @Column(name = "firstname",columnDefinition = "varchar(32)")
+    @MinLength(value = 2)
     private String firstname;
 
     @Column(name = "lastname",columnDefinition = "varchar(32)")
+    @MinLength(value = 2)
     private String lastname;
 
     @Column(name = "email",columnDefinition = "varchar(64)", nullable = false)
     private String email;
 
     @Column(name = "password",columnDefinition = "varchar(16)", nullable = false)
+    @MinLength(value = 8)
     private String password;
 
     @Column(name = "is_deleted")
