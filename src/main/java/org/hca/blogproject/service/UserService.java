@@ -88,7 +88,6 @@ public class UserService{
         User userToCheck = UserMapper.INSTANCE.userRequestDtoToUser(request);
         userBusinessRules.validateUserFieldLengths(userToCheck);
         userBusinessRules.checkIfEmailValid(userToCheck.getEmail());
-        userBusinessRules.checkIfNull(userToCheck.getPassword());
         return userToCheck;
     }
 

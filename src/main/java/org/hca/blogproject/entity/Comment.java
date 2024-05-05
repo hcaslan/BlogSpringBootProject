@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.hca.blogproject.utility.annotation.MaxLength;
 import org.hca.blogproject.utility.annotation.MinLength;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -23,6 +24,7 @@ public class Comment {
 
     @Column(name = "content",columnDefinition = "varchar(2048)", nullable = false)
     @MinLength(value = 2)
+    @MaxLength(value = 2048)
     private String content;
 
 //    @Column(name = "is_deleted")

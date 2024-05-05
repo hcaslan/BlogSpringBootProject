@@ -2,18 +2,16 @@ package org.hca.blogproject.exception;
 
 import lombok.Getter;
 
-import java.sql.SQLException;
-
 @Getter
-public class DataBaseException extends RuntimeException {
+public class LengthException extends RuntimeException {
     private ErrorType errorType;
 
-    public DataBaseException(ErrorType errorType) {
+    public LengthException(ErrorType errorType) {
         super(errorType.getMessage());
         this.errorType = errorType;
     }
 
-    public DataBaseException(ErrorType errorType, String customMessage) {
+    public LengthException(ErrorType errorType, String customMessage) {
         super(customMessage);
         this.errorType = errorType;
     }

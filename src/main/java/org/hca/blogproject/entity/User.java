@@ -10,6 +10,7 @@ import org.hca.blogproject.utility.annotation.MinLength;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import javax.validation.constraints.Email;
 import java.util.List;
 
 @Data
@@ -33,7 +34,7 @@ public class User {
     @MinLength(value = 2)
     @MaxLength(value = 32)
     private String lastname;
-
+    
     @Column(name = "email",columnDefinition = "varchar(64)", nullable = false)
     private String email;
 

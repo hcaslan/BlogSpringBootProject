@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.hca.blogproject.utility.annotation.MaxLength;
 import org.hca.blogproject.utility.annotation.MinLength;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -23,9 +24,11 @@ public class Category {
 
     @Column(name = "name",columnDefinition = "varchar(32)", nullable = false)
     @MinLength(value = 2)
+    @MaxLength(value = 32)
     private String name;
 
     @Column(name = "description",columnDefinition = "varchar(128)")
+    @MaxLength(value = 128)
     private String description;
 
     @Column(name = "is_deleted")

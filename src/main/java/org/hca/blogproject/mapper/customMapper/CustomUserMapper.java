@@ -1,6 +1,7 @@
 package org.hca.blogproject.mapper.customMapper;
 
 import lombok.RequiredArgsConstructor;
+import org.hca.blogproject.constant.Constant;
 import org.hca.blogproject.dto.response.*;
 import org.hca.blogproject.entity.Category;
 import org.hca.blogproject.entity.Post;
@@ -17,7 +18,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Component
 public class CustomUserMapper {
-    private final String DELETED_USER = "DELETED_USER";
     public DetailedUserResponseDto userToDetailedUserResponseDto(User user) {
         List<PostResponseDto> postResponseDtoList = new ArrayList<>();
         user.getPosts().forEach(post -> {
@@ -40,7 +40,7 @@ public class CustomUserMapper {
                     .content(post.getContent())
                     .title(post.getTitle())
                     .categories(categoryNames)
-                    .postWriterName(post.getUser().isDeleted() ? DELETED_USER : getUserFirstAndLastName(post.getUser()))
+                    .postWriterName(post.getUser().isDeleted() ? Constant.DELETED_USER : getUserFirstAndLastName(post.getUser()))
                     .build();
     }
     private List<String> getStringCategoryNames(Post post) {

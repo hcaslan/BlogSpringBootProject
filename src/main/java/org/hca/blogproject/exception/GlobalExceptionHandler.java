@@ -13,27 +13,27 @@ public class GlobalExceptionHandler {
 //    }
 
 
-    @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ErrorMessage> handleBusinessException(BusinessException ex) {
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<ErrorMessage> handleBusinessException(ValidationException ex) {
         ErrorType errorType = ex.getErrorType();
         return new ResponseEntity<>(createErrorMessage(ex),
                 errorType.getHttpStatus());
     }
-    @ExceptionHandler(DataBaseException.class)
-    public ResponseEntity<ErrorMessage> handleDataBaseException(DataBaseException ex) {
+    @ExceptionHandler(LengthException.class)
+    public ResponseEntity<ErrorMessage> handleDataBaseException(LengthException ex) {
         ErrorType errorType = ex.getErrorType();
         return new ResponseEntity<>(createErrorMessage(ex),
                 errorType.getHttpStatus());
     }
 
-    private ErrorMessage createErrorMessage(BusinessException ex) {
+    private ErrorMessage createErrorMessage(ValidationException ex) {
         return ErrorMessage.builder()
                 .code(ex.getErrorType().getCode())
                 .message(ex.getMessage())
                 .build();
     }
 
-    private ErrorMessage createErrorMessage(DataBaseException ex) {
+    private ErrorMessage createErrorMessage(LengthException ex) {
         return ErrorMessage.builder()
                 .code(ex.getErrorType().getCode())
                 .message(ex.getMessage())

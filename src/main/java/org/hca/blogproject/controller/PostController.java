@@ -18,13 +18,13 @@ import static org.hca.blogproject.constant.EndPoints.*;
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
-    @PostMapping
+    @PostMapping(CREATE)
     public ResponseEntity<PostResponseDto> save(@RequestBody PostRequestDto dto) {
         return ResponseEntity.ok(postService.saveDto(dto));
     }
 
     //findAll
-    @GetMapping
+    @GetMapping(GET_ALL)
     public ResponseEntity<List<PostResponseDto>> findAll() {
         return ResponseEntity.ok(postService.findAllDto());
     }

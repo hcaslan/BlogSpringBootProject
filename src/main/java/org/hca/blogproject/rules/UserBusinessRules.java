@@ -1,7 +1,7 @@
 package org.hca.blogproject.rules;
 
 import org.hca.blogproject.entity.User;
-import org.hca.blogproject.exception.BusinessException;
+import org.hca.blogproject.exception.ValidationException;
 import org.hca.blogproject.exception.ErrorType;
 import org.hca.blogproject.repository.UserRepository;
 import org.hca.blogproject.rules.manager.BusinessRulesManager;
@@ -34,30 +34,30 @@ public class UserBusinessRules extends BusinessRulesManager<User,Long> {
             Field passwordField = user.getClass().getDeclaredField("password");
             validateFieldLength(user.getPassword(),passwordField);
         }catch (NoSuchFieldException e){
-            throw new BusinessException(ErrorType.FIELD_ERROR);
+            throw new ValidationException(ErrorType.FIELD_ERROR);
         }
     }
     public void checkIfEmailValid(String email) {
         EmailValidator validator = EmailValidator.getInstance();
-        if(!validator.isValid(email)) throw new BusinessException(ErrorType.EMAIL_NOT_VALID);
+        if(!validator.isValid(email)) throw new ValidationException(ErrorType.EMAIL_NOT_VALID);
     }
     public void checkIfEmailTakenBySomeoneElse(String email, Long user_id) {
-        if (userRepository.existsByEmailAndIdNot(email, user_id)) throw new BusinessException(ErrorType.EMAIL_ALREADY_EXISTS);
+        if (userRepository.existsByEmailAndIdNot(email, user_id)) throw new ValidationException(ErrorType.EMAIL_ALREADY_EXISTS);
     }
     public void checkIfEmailTakenBySomeoneElse(String email) {
-        if (userRepository.existsByEmail(email)) throw new BusinessException(ErrorType.EMAIL_ALREADY_EXISTS);
+        if (userRepository.existsByEmail(email)) throw new ValidationException(ErrorType.EMAIL_ALREADY_EXISTS);
     }
     public void checkIfUserDeleted(Long id){
         Optional<User> optionalUser = userRepository.findById(id);
         if(optionalUser.isPresent()){
             User user = optionalUser.get();
-            if(user.isDeleted()) throw new BusinessException(ErrorType.USER_DELETED);
+            if(user.isDeleted()) throw new ValidationException(ErrorType.USER_DELETED);
         }
     }
 
     public void checkIfUserAlreadyActive(Long id) {
         checkIfExistsById(id);
-        if(!userRepository.findById(id).get().isDeleted()) throw new BusinessException(ErrorType.USER_ALREADY_ACTIVE); //checked at business rules
+        if(!userRepository.findById(id).get().isDeleted()) throw new ValidationException(ErrorType.USER_ALREADY_ACTIVE); //checked at business rules
     }
 }
 

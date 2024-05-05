@@ -1,6 +1,7 @@
 package org.hca.blogproject.mapper.customMapper;
 
 import lombok.RequiredArgsConstructor;
+import org.hca.blogproject.constant.Constant;
 import org.hca.blogproject.dto.request.PostRequestDto;
 import org.hca.blogproject.dto.response.CommentResponseDto;
 import org.hca.blogproject.dto.response.DetailedPostResponseDto;
@@ -29,7 +30,6 @@ public class CustomPostMapper {
     private final CategoryBusinessRules categoryBusinessRules;
     private final CategoryService categoryService;
     private final UserService userService;
-    private final String DELETED_USER = "DELETED_USER";
 
     public List<PostResponseDto> postListToPostResponseDtoList(List<Post> postList) {
         List<PostResponseDto> results = new ArrayList<>();
@@ -48,7 +48,7 @@ public class CustomPostMapper {
                     .content(post.getContent())
                     .title(post.getTitle())
                     .categories(categoryNames)
-                    .postWriterName(post.getUser().isDeleted() ? DELETED_USER : getUserFirstAndLastName(post.getUser()))
+                    .postWriterName(post.getUser().isDeleted() ? Constant.DELETED_USER : getUserFirstAndLastName(post.getUser()))
                     .likes(likes)
                     .commentList(commentResponseDtoList)
                     .createdAt(post.getCreatedAt())
@@ -90,7 +90,7 @@ public class CustomPostMapper {
                     .content(post.getContent())
                     .title(post.getTitle())
                     .categories(categoryNames)
-                    .postWriterName(post.getUser().isDeleted() ? DELETED_USER : getUserFirstAndLastName(post.getUser()))
+                    .postWriterName(post.getUser().isDeleted() ? Constant.DELETED_USER : getUserFirstAndLastName(post.getUser()))
                     .build();
 
     }
@@ -118,7 +118,7 @@ public class CustomPostMapper {
         return CommentResponseDto.builder()
                 .id(comment.getId())
                 .commentContent(comment.getContent())
-                .commenterName(comment.getUser().isDeleted() ? DELETED_USER : getUserFirstAndLastName(comment.getUser()))
+                .commenterName(comment.getUser().isDeleted() ? Constant.DELETED_USER : getUserFirstAndLastName(comment.getUser()))
                 .build();
     }
 

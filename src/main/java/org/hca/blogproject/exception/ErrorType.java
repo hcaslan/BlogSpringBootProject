@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorType {
     NOT_FOUND(5000, "Not Found", HttpStatus.NOT_FOUND),
     DATABASE_ERROR(5001, "", HttpStatus.INTERNAL_SERVER_ERROR),
-    FIELD_ERROR(5002, "", HttpStatus.BAD_REQUEST),
+    FIELD_ERROR(5002, "", HttpStatus.INTERNAL_SERVER_ERROR),
     EMAIL_NOT_VALID(5003, "Email is not valid", HttpStatus.BAD_REQUEST),
     EMPTY_FIELD(5004, "This field can not be empty.", HttpStatus.BAD_REQUEST),
     USER_NOT_FOUND(5100, "User not found", HttpStatus.NOT_FOUND),

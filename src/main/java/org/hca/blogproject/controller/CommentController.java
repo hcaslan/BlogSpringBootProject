@@ -19,7 +19,7 @@ import static org.hca.blogproject.constant.EndPoints.*;
 @RequiredArgsConstructor
 public class CommentController {
     private final CommentService commentService;
-    @PostMapping
+    @PostMapping(CREATE)
     public ResponseEntity<DetailedCommentResponseDto> comment(@RequestBody CommentRequestDto dto){
         return ResponseEntity.ok(commentService.comment(dto));
     }
@@ -27,7 +27,7 @@ public class CommentController {
     public ResponseEntity<CommentResponseDto> delete(@PathVariable Long id){
         return ResponseEntity.ok(commentService.delete(id));
     }
-    @GetMapping
+    @GetMapping(GET_ALL)
     public ResponseEntity<List<DetailedCommentResponseDto>> findAll(){
         return ResponseEntity.ok(commentService.findAll());
     }

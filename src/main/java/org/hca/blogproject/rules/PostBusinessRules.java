@@ -1,7 +1,7 @@
 package org.hca.blogproject.rules;
 
 import org.hca.blogproject.entity.Post;
-import org.hca.blogproject.exception.BusinessException;
+import org.hca.blogproject.exception.ValidationException;
 import org.hca.blogproject.exception.ErrorType;
 import org.hca.blogproject.repository.PostRepository;
 import org.hca.blogproject.rules.manager.BusinessRulesManager;
@@ -31,23 +31,23 @@ public class PostBusinessRules extends BusinessRulesManager<Post,Long> {
             Field titleField = post.getClass().getDeclaredField("title");
             validateFieldLength(post.getTitle(),titleField);
         }catch (NoSuchFieldException e){
-            throw new BusinessException(ErrorType.FIELD_ERROR);
+            throw new ValidationException(ErrorType.FIELD_ERROR);
         }
     }
 
     public void checkIfPostListEmpty(List<Post> posts){
-        if(posts.isEmpty()) throw new BusinessException(ErrorType.POST_NOT_FOUND);
+        if(posts.isEmpty()) throw new ValidationException(ErrorType.POST_NOT_FOUND);
     }
 
     public void checkIfPostLikedByUser(Long userId, Long postId) {
         checkIfExistsById(postId);
         userBusinessRules.checkIfExistsById(userId);
-        if(postRepository.findById(postId).get().getLikes().stream().anyMatch(user -> user.getId().equals(userId))) throw new BusinessException(ErrorType.POST_ALREADY_LIKED);//checked at business rules
+        if(postRepository.findById(postId).get().getLikes().stream().anyMatch(user -> user.getId().equals(userId))) throw new ValidationException(ErrorType.POST_ALREADY_LIKED);//checked at business rules
     }
     public void checkIfPostAlreadyLikedByUser(Long userId, Long postId) {
         checkIfExistsById(postId);
         userBusinessRules.checkIfExistsById(userId);
-        if(postRepository.findById(postId).get().getLikes().stream().noneMatch(user -> user.getId().equals(userId))) throw new BusinessException(ErrorType.POST_NOT_LIKED);//checked at business rules
+        if(postRepository.findById(postId).get().getLikes().stream().noneMatch(user -> user.getId().equals(userId))) throw new ValidationException(ErrorType.POST_NOT_LIKED);//checked at business rules
     }
     //    public void checkIfPostDeleted(Long id){
 //        Optional<Post> optionalPost = postRepository.findById(id);

@@ -151,8 +151,6 @@ public class PostService {
     }
 
     private Post checkPostWithRulesToSave(PostRequestDto request) {
-        postBusinessRules.checkIfNull(request.title());
-        postBusinessRules.checkIfNull(request.content());
         userBusinessRules.checkIfNull(request.userId());
         categoryBusinessRules.checkIfListEmpty(request.categories());
         userBusinessRules.checkIfExistsById(request.userId());

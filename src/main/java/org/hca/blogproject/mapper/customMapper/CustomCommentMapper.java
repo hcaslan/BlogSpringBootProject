@@ -1,6 +1,7 @@
 package org.hca.blogproject.mapper.customMapper;
 
 import lombok.RequiredArgsConstructor;
+import org.hca.blogproject.constant.Constant;
 import org.hca.blogproject.dto.request.CommentRequestDto;
 import org.hca.blogproject.dto.response.CommentResponseDto;
 import org.hca.blogproject.dto.response.DetailedCommentResponseDto;
@@ -23,13 +24,12 @@ public class CustomCommentMapper {
     private final CustomPostMapper customPostMapper;
     private final UserService userService;
     private final PostService postService;
-    private final String DELETED_USER = "DELETED_USER";
     public DetailedCommentResponseDto commentToDetailedCommentResponseDto(Comment comment) {
         return DetailedCommentResponseDto.builder()
                 .id(comment.getId())
                 .commentContent(comment.getContent())
                 .post(customPostMapper.postToPostResponseDto(comment.getPost()))
-                .commenterName(comment.getUser().isDeleted() ? DELETED_USER : getUserFirstAndLastName(comment.getUser()))
+                .commenterName(comment.getUser().isDeleted() ? Constant.DELETED_USER : getUserFirstAndLastName(comment.getUser()))
                 .createdAt(comment.getCreatedAt())
                 .build();
     }
@@ -37,7 +37,7 @@ public class CustomCommentMapper {
         return CommentResponseDto.builder()
                 .id(comment.getId())
                 .commentContent(comment.getContent())
-                .commenterName(comment.getUser().isDeleted() ? DELETED_USER : getUserFirstAndLastName(comment.getUser()))
+                .commenterName(comment.getUser().isDeleted() ? Constant.DELETED_USER : getUserFirstAndLastName(comment.getUser()))
                 .build();
     }
     public Comment commentRequestDtoToComment(CommentRequestDto commentRequestDto) {

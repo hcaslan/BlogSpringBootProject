@@ -20,13 +20,13 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     //save
-    @PostMapping
+    @PostMapping(CREATE)
     public ResponseEntity<CategoryResponseDto> save(@RequestBody CategoryRequestDto dto) {
         return ResponseEntity.ok(categoryService.saveDto(dto));
     }
 
     //findAll
-    @GetMapping
+    @GetMapping(GET_ALL)
     public ResponseEntity<List<CategoryResponseDto>> findAll() {
         return ResponseEntity.ok(categoryService.findAllDto());
     }

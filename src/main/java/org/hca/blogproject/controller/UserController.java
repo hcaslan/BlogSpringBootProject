@@ -22,13 +22,13 @@ public class UserController {
     private final UserService userService;
 
     //save
-    @PostMapping
+    @PostMapping(CREATE)
     public ResponseEntity<UserResponseDto> save(@Valid @RequestBody UserRequestDto dto) {
         return ResponseEntity.ok(userService.saveDto(dto));
     }
 
     //findAll
-    @GetMapping
+    @GetMapping(GET_ALL)
     public ResponseEntity<List<UserResponseDto>> findAll() {
         return ResponseEntity.ok(userService.findAllDto());
     }

@@ -1,7 +1,7 @@
 package org.hca.blogproject.rules;
 
 import org.hca.blogproject.entity.Comment;
-import org.hca.blogproject.exception.BusinessException;
+import org.hca.blogproject.exception.ValidationException;
 import org.hca.blogproject.exception.ErrorType;
 import org.hca.blogproject.repository.CommentRepository;
 import org.hca.blogproject.rules.manager.BusinessRulesManager;
@@ -27,7 +27,7 @@ public class CommentBusinessRules extends BusinessRulesManager<Comment,Long> {
             validateFieldLength(comment.getContent(),contentField);
 
         }catch (NoSuchFieldException e){
-            throw new BusinessException(ErrorType.FIELD_ERROR);
+            throw new ValidationException(ErrorType.FIELD_ERROR);
         }
     }
 }

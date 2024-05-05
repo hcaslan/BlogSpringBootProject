@@ -1,7 +1,7 @@
 package org.hca.blogproject.constant;
 
 public class EndPoints {
-    public static final String VERSION="/v1";
+    public static final String VERSION="/v7";
     //profiller:
     public static final String API="/api";
     public static final String DEV="/dev";
@@ -16,6 +16,8 @@ public class EndPoints {
     public static final String COMMENT="/comments";
 
     //methods:
+    public static final String CREATE="";
+    public static final String GET_ALL="";
     public static final String UPDATE="/{id}";
     public static final String DELETE="/{id}";
     public static final String FIND_BY_ID="/{id}";
