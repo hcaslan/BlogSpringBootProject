@@ -6,6 +6,10 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
 
+/**
+ * @CustomAnnotation
+ * Custom validation annotation
+ */
 @Documented
 @Constraint(validatedBy = MaxLengthValidator.class)
 @Target(ElementType.FIELD)

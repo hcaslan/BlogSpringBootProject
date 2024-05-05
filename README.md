@@ -72,19 +72,19 @@ The following API endpoints are available:
 
 - #### Post associated endpoints:
 
-| Endpoint Tag                     | Call   | Endpoint                                  | Description                                                        |
-|----------------------------------|--------|-------------------------------------------|--------------------------------------------------------------------|
-| CREATE                           | POST   | `/api/v7/posts`                           | Create a new post.                                                 |
-| GET_ALL                          | GET    | `/api/v7/posts`                           | Get a list of all posts.                                           |
-| FIND_BY_ID                       | GET    | `/api/v7/posts/{id}`                      | Get detailed information about a specific post.                    |
-| UPDATE                           | PUT    | `/api/v7/posts/{id}`                      | Update a post.                                                     |
-| DELETE                           | DELETE | `/api/v7/posts/{id}`                      | Delete a post.                                                     |
-| LIKE                             | POST   | `/api/v7/posts/like`                      | Like a post.                                                       |
-| UNLIKE                           | POST   | `/api/v7/posts/unlike`                    | Unlike a liked post.                                               |
-| GET_POSTS_BY_USER_ID             | GET    | `/api/v7/posts/user/{userId}`             | Get a list of all posts published by a specific user.              |
-| GET_POSTS_BY_CATEGORY_ID         | GET    | `/api/v7/posts/category/{categoryId}`     | Get a list of all posts in a specific category.                    |
-| GET_POSTS_IN_CHRONOLOGICAL_ORDER | GET    | `/api/v7/posts/sortPostsByPublication`    | Get the posts as an ordered list from newest to oldest.            |
-| SEARCH                           | GET    | `/api/v7/posts/searchByKeyword`           | Get posts based on a specific keyword.                             |
+| Endpoint Tag                     | Call   |                 Endpoint                  | Description                                                        |
+|----------------------------------|--------|:-----------------------------------------:|--------------------------------------------------------------------|
+| CREATE                           | POST   |              `/api/v7/posts`              | Create a new post.                                                 |
+| GET_ALL                          | GET    |              `/api/v7/posts`              | Get a list of all posts.                                           |
+| FIND_BY_ID                       | GET    |           `/api/v7/posts/{id}`            | Get detailed information about a specific post.                    |
+| UPDATE                           | PUT    |           `/api/v7/posts/{id}`            | Update a post.                                                     |
+| DELETE                           | DELETE |           `/api/v7/posts/{id}`            | Delete a post.                                                     |
+| LIKE                             | POST   |           `/api/v7/posts/like`            | Like a post.                                                       |
+| UNLIKE                           | POST   |          `/api/v7/posts/unlike`           | Unlike a liked post.                                               |
+| GET_POSTS_BY_USER_ID             | GET    |       `/api/v7/posts/user/{userId}`       | Get a list of all posts published by a specific user.              |
+| GET_POSTS_BY_CATEGORY_ID         | GET    |   `/api/v7/posts/category/{categoryId}`   | Get a list of all posts in a specific category.                    |
+| GET_POSTS_IN_CHRONOLOGICAL_ORDER | GET    |  `/api/v7/posts/sortPostsByPublication`   | Get the posts as an ordered list from newest to oldest.            |
+| SEARCH                           | GET    |      `/api/v7/posts/searchByKeyword`      | Get posts based on a specific keyword.                             |
 | GET_POSTS_BY_CATEGORY_NAME       | GET    | `/api/v7/posts/user/searchByCategoryName` | Get a list of all posts in a specific category (by category name). |
 
 - #### User associated endpoints:

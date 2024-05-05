@@ -5,6 +5,10 @@ import org.hca.blogproject.utility.annotation.MinLength;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+/**
+ * @CustomValidator
+ * Custom validation annotation
+ */
 public class MinLengthValidator implements ConstraintValidator<MinLength, String> {
     private int minLength;
 

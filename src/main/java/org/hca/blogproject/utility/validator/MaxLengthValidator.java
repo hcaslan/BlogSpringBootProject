@@ -5,6 +5,10 @@ import org.hca.blogproject.utility.annotation.MaxLength;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+/**
+ * @CustomValidator
+ * Custom validation annotation
+ */
 public class MaxLengthValidator implements ConstraintValidator<MaxLength, String> {
     private int maxLength;
 

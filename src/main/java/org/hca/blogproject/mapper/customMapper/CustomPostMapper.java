@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 /**
  * @CustomMapper
+ * Contains custom mapping logic for specific scenarios.
  */
 @RequiredArgsConstructor
 @Component

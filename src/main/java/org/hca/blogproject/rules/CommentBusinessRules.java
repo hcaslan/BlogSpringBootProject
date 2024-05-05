@@ -12,6 +12,7 @@ import java.lang.reflect.Field;
 
 /**
  * @BusinessRules
+ * These classes provide a structured approach to validate entities and perform custom validation checks specific to the project's requirements
  */
 @Service
 public class CommentBusinessRules extends BusinessRulesManager<Comment,Long> {

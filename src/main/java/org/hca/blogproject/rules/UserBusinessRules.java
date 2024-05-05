@@ -13,6 +13,7 @@ import java.lang.reflect.Field;
 import java.util.Optional;
 /**
  * @BusinessRules
+ * These classes provide a structured approach to validate entities and perform custom validation checks specific to the project's requirements
  */
 @Service
 public class UserBusinessRules extends BusinessRulesManager<User,Long> {

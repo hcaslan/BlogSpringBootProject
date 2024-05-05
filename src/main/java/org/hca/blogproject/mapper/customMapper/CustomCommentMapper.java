@@ -17,6 +17,7 @@ import java.util.List;
 
 /**
  * @CustomMapper
+ * Contains custom mapping logic for specific scenarios.
  */
 @RequiredArgsConstructor
 @Component
