@@ -5,8 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.hca.blogproject.utility.MinLength;
-import org.hibernate.annotations.Cascade;
+import org.hca.blogproject.utility.annotation.MinLength;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -55,7 +54,7 @@ public class Post {
     )
     private List<User> likes;
 
-    @OneToMany(mappedBy = "post",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post",fetch = FetchType.EAGER)
     private List<Comment> comments;
 
     @CreationTimestamp

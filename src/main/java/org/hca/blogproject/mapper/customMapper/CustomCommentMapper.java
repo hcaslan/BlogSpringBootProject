@@ -1,11 +1,9 @@
-package org.hca.blogproject.mapper;
+package org.hca.blogproject.mapper.customMapper;
 
 import lombok.RequiredArgsConstructor;
 import org.hca.blogproject.dto.request.CommentRequestDto;
 import org.hca.blogproject.dto.response.CommentResponseDto;
 import org.hca.blogproject.dto.response.DetailedCommentResponseDto;
-import org.hca.blogproject.dto.response.DetailedPostResponseDto;
-import org.hca.blogproject.dto.response.PostResponseDto;
 import org.hca.blogproject.entity.Comment;
 import org.hca.blogproject.entity.Post;
 import org.hca.blogproject.entity.User;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @CustomMapper
@@ -32,7 +29,7 @@ public class CustomCommentMapper {
                 .id(comment.getId())
                 .commentContent(comment.getContent())
                 .post(customPostMapper.postToPostResponseDto(comment.getPost()))
-                .commenterName(comment.getUser().isDeleted() ? DELETED_USER : getUserFirstAndLastName(comment))
+                .commenterName(comment.getUser().isDeleted() ? DELETED_USER : getUserFirstAndLastName(comment.getUser()))
                 .createdAt(comment.getCreatedAt())
                 .build();
     }
@@ -40,7 +37,7 @@ public class CustomCommentMapper {
         return CommentResponseDto.builder()
                 .id(comment.getId())
                 .commentContent(comment.getContent())
-                .commenterName(comment.getUser().isDeleted() ? DELETED_USER : getUserFirstAndLastName(comment))
+                .commenterName(comment.getUser().isDeleted() ? DELETED_USER : getUserFirstAndLastName(comment.getUser()))
                 .build();
     }
     public Comment commentRequestDtoToComment(CommentRequestDto commentRequestDto) {
@@ -61,7 +58,7 @@ public class CustomCommentMapper {
         return results;
     }
 
-    private String getUserFirstAndLastName(Comment comment) {
-        return comment.getUser().getFirstname() + " " + comment.getUser().getLastname();
+    private String getUserFirstAndLastName(User user) {
+        return user.getFirstname() + " " + user.getLastname();
     }
 }

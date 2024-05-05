@@ -7,12 +7,12 @@ import org.hca.blogproject.dto.response.PostResponseDto;
 import org.hca.blogproject.entity.Comment;
 import org.hca.blogproject.entity.Post;
 import org.hca.blogproject.entity.User;
-import org.hca.blogproject.mapper.CustomPostMapper;
+import org.hca.blogproject.mapper.customMapper.CustomPostMapper;
 import org.hca.blogproject.repository.CommentRepository;
 import org.hca.blogproject.repository.PostRepository;
-import org.hca.blogproject.service.rules.CategoryBusinessRules;
-import org.hca.blogproject.service.rules.PostBusinessRules;
-import org.hca.blogproject.service.rules.UserBusinessRules;
+import org.hca.blogproject.rules.CategoryBusinessRules;
+import org.hca.blogproject.rules.PostBusinessRules;
+import org.hca.blogproject.rules.UserBusinessRules;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -154,6 +154,7 @@ public class PostService {
         postBusinessRules.checkIfNull(request.title());
         postBusinessRules.checkIfNull(request.content());
         userBusinessRules.checkIfNull(request.userId());
+        categoryBusinessRules.checkIfListEmpty(request.categories());
         userBusinessRules.checkIfExistsById(request.userId());
         userBusinessRules.checkIfUserDeleted(request.userId());
         Post postToCheck = customMapper.postRequestDtoToPost(request);

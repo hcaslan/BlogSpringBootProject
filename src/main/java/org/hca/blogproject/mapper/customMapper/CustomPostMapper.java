@@ -1,4 +1,4 @@
-package org.hca.blogproject.mapper;
+package org.hca.blogproject.mapper.customMapper;
 
 import lombok.RequiredArgsConstructor;
 import org.hca.blogproject.dto.request.PostRequestDto;
@@ -11,8 +11,8 @@ import org.hca.blogproject.entity.Post;
 import org.hca.blogproject.entity.User;
 import org.hca.blogproject.service.CategoryService;
 import org.hca.blogproject.service.UserService;
-import org.hca.blogproject.service.rules.CategoryBusinessRules;
-import org.hca.blogproject.service.rules.UserBusinessRules;
+import org.hca.blogproject.rules.CategoryBusinessRules;
+import org.hca.blogproject.rules.UserBusinessRules;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -63,8 +63,14 @@ public class CustomPostMapper {
                     List<Category> categories = new ArrayList<>();
                     if (!categoryBusinessRules.isCategoryExistsByName(categoryName)) {
                         categories.add(categoryService.save(Category.builder().name(categoryName).build()));
-                    } else {
-                        categories.add(categoryService.findCategoryByNameReturnCategory(categoryName));
+                    } else{
+                        Category category = categoryService.findCategoryByNameReturnCategory(categoryName);
+                        if(category.isDeleted()){
+                            category.setDeletedAt(null);
+                            category.setDeleted(false);
+                        }
+                        categoryService.save(category);
+                        categories.add(category);
                     }
                     return categories.stream();
                 })
@@ -112,14 +118,14 @@ public class CustomPostMapper {
         return CommentResponseDto.builder()
                 .id(comment.getId())
                 .commentContent(comment.getContent())
-                .commenterName(getUserFirstAndLastName(comment))
+                .commenterName(comment.getUser().isDeleted() ? DELETED_USER : getUserFirstAndLastName(comment.getUser()))
                 .build();
     }
 
-    private String getUserFirstAndLastName(User post) {
-        return post.getFirstname() + " " + post.getLastname();
+    private String getUserFirstAndLastName(User user) {
+        return user.getFirstname() + " " + user.getLastname();
     }
-    private String getUserFirstAndLastName(Comment comment) {
-        return comment.getUser().getFirstname() + " " + comment.getUser().getLastname();
-    }
+//    private String getUserFirstAndLastName(Comment comment) {
+//        return comment.getUser().getFirstname() + " " + comment.getUser().getLastname();
+//    }
 }

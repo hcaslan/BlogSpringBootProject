@@ -7,11 +7,11 @@ import org.hca.blogproject.dto.response.DetailedCommentResponseDto;
 import org.hca.blogproject.entity.Comment;
 import org.hca.blogproject.entity.Post;
 import org.hca.blogproject.entity.User;
-import org.hca.blogproject.mapper.CustomCommentMapper;
+import org.hca.blogproject.mapper.customMapper.CustomCommentMapper;
 import org.hca.blogproject.repository.CommentRepository;
-import org.hca.blogproject.service.rules.CommentBusinessRules;
-import org.hca.blogproject.service.rules.PostBusinessRules;
-import org.hca.blogproject.service.rules.UserBusinessRules;
+import org.hca.blogproject.rules.CommentBusinessRules;
+import org.hca.blogproject.rules.PostBusinessRules;
+import org.hca.blogproject.rules.UserBusinessRules;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

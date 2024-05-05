@@ -1,13 +1,15 @@
-package org.hca.blogproject.utility;
+package org.hca.blogproject.rules.manager;
 
-import jakarta.persistence.Column;
 import lombok.RequiredArgsConstructor;
 import org.hca.blogproject.exception.BusinessException;
 import org.hca.blogproject.exception.DataBaseException;
 import org.hca.blogproject.exception.ErrorType;
+import org.hca.blogproject.utility.annotation.MaxLength;
+import org.hca.blogproject.utility.annotation.MinLength;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class BusinessRulesManager<T,ID> implements IBusinessRules<T,ID>{
@@ -26,37 +28,39 @@ public class BusinessRulesManager<T,ID> implements IBusinessRules<T,ID>{
     public boolean isExistsById(ID id) {
         return (jpaRepository.existsById(id));
     }
-    public void checkIfNull(String field) {
-        if(field == null) {
-            throw new BusinessException(ErrorType.NULL_FIELD);
+    public void checkIfNull(String value) {
+        if(value == null) {
+            throw new BusinessException(ErrorType.EMPTY_FIELD);
         }
     }
 
     @Override
-    public void checkIfNull(Long field) {
-        if(field == null) {
-            throw new BusinessException(ErrorType.NULL_FIELD);
+    public void checkIfNull(Long value) {
+        if(value == null) {
+            throw new BusinessException(ErrorType.EMPTY_FIELD);
         }
     }
+
+    @Override
+    public void checkIfListEmpty(List<String> list) {
+        if(list == null) throw new BusinessException(ErrorType.EMPTY_FIELD);
+        if (list.isEmpty()) throw new BusinessException(ErrorType.EMPTY_FIELD);
+    }
+
     private int getMaxLength(Field field) {
-        Column column = field.getAnnotation(Column.class);
-        if (column != null) {
-            String columnDefinition = column.columnDefinition();
-            String[] parts = columnDefinition.split("\\(");
-            if (parts.length > 1) {
-                String lengthPart = parts[1].replaceAll("\\)", "");
-                return Integer.parseInt(lengthPart);
-            }
+        MaxLength maxLength = field.getAnnotation(MaxLength.class);
+        if (maxLength != null) {
+                return maxLength.value();
+
         }
-        // Default length if not found in column definition
-        return -1;
+        return Integer.MAX_VALUE;
     }
     private static int getMinLength(Field field) {
         MinLength minLength = field.getAnnotation(MinLength.class);
         if (minLength != null) {
             return minLength.value();
         }
-        return 0;
+        return Integer.MIN_VALUE;
     }
 
     private void validateFieldLength(String value, String fieldName, int maxLength, int minLength) {

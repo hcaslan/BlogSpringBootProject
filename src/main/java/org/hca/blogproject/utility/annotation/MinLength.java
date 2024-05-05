@@ -1,4 +1,6 @@
-package org.hca.blogproject.utility;
+package org.hca.blogproject.utility.annotation;
+
+import org.hca.blogproject.utility.validator.MinLengthValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

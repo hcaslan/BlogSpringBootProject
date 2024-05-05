@@ -1,4 +1,4 @@
-package org.hca.blogproject.mapper;
+package org.hca.blogproject.mapper.customMapper;
 
 import lombok.RequiredArgsConstructor;
 import org.hca.blogproject.dto.response.*;
@@ -49,7 +49,7 @@ public class CustomUserMapper {
                 .map(Category::getName)
                 .collect(Collectors.toList());
     }
-    private String getUserFirstAndLastName(User post) {
-        return post.getFirstname() + " " + post.getLastname();
+    private String getUserFirstAndLastName(User user) {
+        return user.getFirstname() + " " + user.getLastname();
     }
 }

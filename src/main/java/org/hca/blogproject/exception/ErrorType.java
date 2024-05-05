@@ -11,7 +11,7 @@ public enum ErrorType {
     DATABASE_ERROR(5001, "", HttpStatus.INTERNAL_SERVER_ERROR),
     FIELD_ERROR(5002, "", HttpStatus.BAD_REQUEST),
     EMAIL_NOT_VALID(5003, "Email is not valid", HttpStatus.BAD_REQUEST),
-    NULL_FIELD(5004, "This field can not be null.", HttpStatus.BAD_REQUEST),
+    EMPTY_FIELD(5004, "This field can not be empty.", HttpStatus.BAD_REQUEST),
     USER_NOT_FOUND(5100, "User not found", HttpStatus.NOT_FOUND),
     EMAIL_ALREADY_EXISTS(5101, "Email already exists", HttpStatus.BAD_REQUEST),
     USER_DELETED(5102, "User deleted, unreachable.", HttpStatus.GONE),

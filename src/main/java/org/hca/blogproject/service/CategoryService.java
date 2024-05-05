@@ -6,7 +6,7 @@ import org.hca.blogproject.dto.response.CategoryResponseDto;
 import org.hca.blogproject.entity.Category;
 import org.hca.blogproject.mapper.CategoryMapper;
 import org.hca.blogproject.repository.CategoryRepository;
-import org.hca.blogproject.service.rules.CategoryBusinessRules;
+import org.hca.blogproject.rules.CategoryBusinessRules;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -94,6 +94,7 @@ public class CategoryService {
 
     public CategoryResponseDto findCategoryByNameReturnDto(String categoryName) {
         categoryBusinessRules.checkIfCategoryExistsByName(categoryName);
+        categoryBusinessRules.checkIfCategoryDeleted(categoryName);
 
         return categoryMapper.categoryToCategoryResponseDto(categoryRepository.findByName(categoryName).get());//checked at business rules
     }
